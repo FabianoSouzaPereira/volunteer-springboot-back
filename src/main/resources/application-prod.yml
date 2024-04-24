@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://fabianodspereira:Y7UUiDh0bbjmGlxE@volunteers.znrcbmn.mongodb.net/volunteer
+
+  jpa:
+    open-in-view: false
