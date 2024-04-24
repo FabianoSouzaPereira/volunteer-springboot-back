@@ -3,14 +3,14 @@ package com.fabianospdev.volunteer.dto;
 import com.fabianospdev.volunteer.domain.models.User;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class UserDTO implements Serializable {
 
     private String id;
     private String name;
-    private String email;
     private String phone;
+    private String email;
+
 
     public String getPhone() {
         return phone;
@@ -52,4 +52,5 @@ public class UserDTO implements Serializable {
     public void setEmail( String email ) {
         this.email = email;
     }
+
 }
