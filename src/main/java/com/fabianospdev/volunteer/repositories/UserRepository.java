@@ -1,6 +1,6 @@
 package com.fabianospdev.volunteer.repositories;
 
-import com.fabianospdev.volunteer.domain.models.User;
+import com.fabianospdev.volunteer.models.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.fabianospdev.volunteer.domain.models;
+package com.fabianospdev.volunteer.models;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

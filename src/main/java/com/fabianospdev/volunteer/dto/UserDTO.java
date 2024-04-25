@@ -1,6 +1,6 @@
 package com.fabianospdev.volunteer.dto;
 
-import com.fabianospdev.volunteer.domain.models.User;
+import com.fabianospdev.volunteer.models.User;
 
 import java.io.Serializable;
 
