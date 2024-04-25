@@ -17,7 +17,7 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Autowired
+    @Autowired(required=true)
     private UserRepository repo;
 
     public List<User> findAll() {
