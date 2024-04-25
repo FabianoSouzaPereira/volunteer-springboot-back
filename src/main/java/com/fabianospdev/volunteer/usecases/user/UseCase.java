@@ -1,23 +1,29 @@
 package com.fabianospdev.volunteer.usecases.user;
 
+import com.fabianospdev.volunteer.config.MessageSourceConfig;
 import com.fabianospdev.volunteer.models.User;
 import com.fabianospdev.volunteer.repositories.UserRepository;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
-import com.fabianospdev.volunteer.services.exception.UserAlreadyExistsException;
+import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
 public class UseCase{
 
     private final UserRepository userRepository;
+    private final MessageSource messageSource;
 
     @Autowired(required=true)
-    public UseCase( UserRepository userRepository) {
+    public UseCase( UserRepository userRepository, MessageSource messageSource) {
         this.userRepository = userRepository;
+        this.messageSource = messageSource;
     }
 
     public List<User> findAll() {
@@ -26,22 +32,21 @@ public class UseCase{
 
     public User findById(String id) {
         Optional<User> obj = userRepository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado"));
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found"));
     }
 
     public User insert(User user) {
-
-        if (userRepository.existsById(user.getId())) {
-            throw new UserAlreadyExistsException("User with id " + user.getId() + " already exists.");
-        }
-
         return userRepository.insert(user);
     }
 
     public User update(User user) {
-        if (!userRepository.existsById(user.getId())) {
-            throw new UserAlreadyExistsException("User with id " + user.getId() + " already not exists.");
+                Optional<User> obj = userRepository.findById(user.getId());
+
+        if (obj.isEmpty()) {
+            String message = messageSource.getMessage("object.not.exists", new Object[]{user.getId()}, LocaleContextHolder.getLocale());
+            throw new ObjectNotExistsException(message);
         }
+
         return userRepository.save(user);
     }
 

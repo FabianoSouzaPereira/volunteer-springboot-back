@@ -47,10 +47,17 @@ public class ResourceExceptionHandler {
         return ResponseEntity.status(status).body(err);
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<StandardError> userAlreadyExists(UserAlreadyExistsException e, HttpServletRequest request) {
+    @ExceptionHandler(ObjectAlreadyExistsException.class)
+    public ResponseEntity<StandardError> ObjectAlreadyExists( ObjectAlreadyExistsException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.CONFLICT; // 409 Conflict
-        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "User Already Exists", e.getMessage(), request.getRequestURI());
+        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Object Already Exists", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(ObjectNotExistsException.class)
+    public ResponseEntity<StandardError> ObjectNotExists( ObjectNotExistsException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT; // 409 Conflict
+        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Object Not Exists", e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 

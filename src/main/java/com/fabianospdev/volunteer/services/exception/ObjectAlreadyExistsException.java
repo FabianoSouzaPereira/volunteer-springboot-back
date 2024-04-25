@@ -1,9 +1,9 @@
 package com.fabianospdev.volunteer.services.exception;
 
-public class UserAlreadyExistsException extends RuntimeException {
+public class ObjectAlreadyExistsException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    public UserAlreadyExistsException(String message) {
+    public ObjectAlreadyExistsException( String message) {
         super(message);
     }
 }

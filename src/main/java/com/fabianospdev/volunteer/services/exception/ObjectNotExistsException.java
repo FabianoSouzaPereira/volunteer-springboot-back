@@ -1,9 +1,9 @@
 package com.fabianospdev.volunteer.services.exception;
 
-public class UserNotExistsException  extends RuntimeException {
+public class ObjectNotExistsException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    public UserNotExistsException(String message) {
+    public ObjectNotExistsException( String message) {
         super( message );
     }
 }
