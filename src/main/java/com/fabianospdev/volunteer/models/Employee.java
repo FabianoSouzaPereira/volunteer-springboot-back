@@ -4,6 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -134,6 +136,13 @@ public class Employee implements Serializable {
 
     public void setJob( String job ) {
         this.job = job;
+    }
+
+    public Employee getDefaultExemple() {
+        Employee exampleUser = new Employee("1", "name", 30, "group", "role",
+                new ArrayList<>( Arrays.asList("Coding", "Testing", "Debugging")),
+                "Active", "+55123456789", "example@example.com","123 Main Street, City, Country", "examplejob");
+        return exampleUser;
     }
 
     @Override
