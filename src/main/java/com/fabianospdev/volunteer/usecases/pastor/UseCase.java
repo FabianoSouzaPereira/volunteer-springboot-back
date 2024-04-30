@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.usecases.pastor;
 
-import com.fabianospdev.volunteer.models.User;
-import com.fabianospdev.volunteer.repositories.UserRepository;
+import com.fabianospdev.volunteer.models.Pastor;
+import com.fabianospdev.volunteer.repositories.PastorRepository;
 import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,40 +15,40 @@ import java.util.Optional;
 @Service
 public class UseCase{
 
-    private final UserRepository userRepository;
+    private final PastorRepository pastorRepository;
     private final MessageSource messageSource;
 
     @Autowired(required=true)
-    public UseCase( UserRepository userRepository, MessageSource messageSource) {
-        this.userRepository = userRepository;
+    public UseCase( PastorRepository pastorRepository, MessageSource messageSource) {
+        this.pastorRepository = pastorRepository;
         this.messageSource = messageSource;
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<Pastor> findAll() {
+        return pastorRepository.findAll();
     }
 
-    public User findById(String id) {
-        Optional<User> obj = userRepository.findById(id);
+    public Pastor findById(String id) {
+        Optional<Pastor> obj = pastorRepository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found"));
     }
 
-    public User insert(User user) {
-        return userRepository.insert(user);
+    public Pastor insert(Pastor pastor) {
+        return pastorRepository.insert(pastor);
     }
 
-    public User update(User user) {
-                Optional<User> obj = userRepository.findById(user.getId());
+    public Pastor update(Pastor pastor) {
+                Optional<Pastor> obj = pastorRepository.findById(pastor.getId());
 
         if (obj.isEmpty()) {
-            String message = messageSource.getMessage("object.not.exists", new Object[]{user.getId()}, LocaleContextHolder.getLocale());
+            String message = messageSource.getMessage("object.not.exists", new Object[]{pastor.getId()}, LocaleContextHolder.getLocale());
             throw new ObjectNotExistsException(message);
         }
 
-        return userRepository.save(user);
+        return pastorRepository.save(pastor);
     }
 
     public void deleteById(String id) {
-        userRepository.deleteById(id);
+        pastorRepository.deleteById(id);
     }
 }
