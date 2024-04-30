@@ -5,6 +5,8 @@ import com.fabianospdev.volunteer.dto.UserDTO;
 import com.fabianospdev.volunteer.repositories.UserRepository;
 import com.fabianospdev.volunteer.usecases.user.UserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,11 @@ public class UserService {
     public List<User> findAll() {
         return useCase.findAll();
     }
+
+    public List<UserDTO> findAllDTO(User user) {
+        return useCase.findAllDTO(user);
+    }
+
 
     public User findById(String id) {
         User obj = useCase.findById(id);

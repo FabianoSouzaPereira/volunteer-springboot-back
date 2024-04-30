@@ -1,5 +1,6 @@
 package com.fabianospdev.volunteer.usecases.user;
 
+import com.fabianospdev.volunteer.dto.UserDTO;
 import com.fabianospdev.volunteer.models.User;
 import com.fabianospdev.volunteer.repositories.UserRepository;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
@@ -7,10 +8,13 @@ import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Example;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserUseCase{
@@ -22,6 +26,13 @@ public class UserUseCase{
     public UserUseCase( UserRepository userRepository, MessageSource messageSource) {
         this.userRepository = userRepository;
         this.messageSource = messageSource;
+    }
+
+    public List<UserDTO> findAllDTO(User user) {
+        Example<User> example = Example.of(user);
+        return userRepository.findAll(example).stream()
+                .map(this::convertToUserDTO)
+                .collect( Collectors.toList());
     }
 
     public List<User> findAll() {
@@ -50,5 +61,14 @@ public class UserUseCase{
 
     public void deleteById(String id) {
         userRepository.deleteById(id);
+    }
+
+    private UserDTO convertToUserDTO(User user) {
+
+        if(user == null){
+            return new UserDTO();
+        }
+
+        return new UserDTO(user);
     }
 }

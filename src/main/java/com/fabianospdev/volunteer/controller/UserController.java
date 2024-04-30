@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,9 +26,8 @@ public class UserController {
 
     @RequestMapping(method=RequestMethod.GET)
     public ResponseEntity<List<UserDTO>> findAll() {
-        List<User> list = service.findAll();
-        List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
-        return ResponseEntity.ok().body(listDto);
+        List<UserDTO> list = service.findAllDTO(new User().getDefaultExemple());
+        return ResponseEntity.ok().body(list);
     }
 
     @RequestMapping(value="/find-all-list", method=RequestMethod.GET)
