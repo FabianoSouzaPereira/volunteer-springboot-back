@@ -3,17 +3,19 @@ package com.fabianospdev.volunteer.services;
 import com.fabianospdev.volunteer.dto.PartnerDTO;
 import com.fabianospdev.volunteer.models.Partner;
 import com.fabianospdev.volunteer.repositories.PartnerRepository;
-import com.fabianospdev.volunteer.usecases.partner.UseCase;
+import com.fabianospdev.volunteer.usecases.partner.PartnerUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class PartnerService{
     @Autowired(required=true)
     private PartnerRepository repository;
 
     @Autowired
-    private UseCase useCase;
+    private PartnerUseCase useCase;
 
 
     public List<Partner> findAll() {

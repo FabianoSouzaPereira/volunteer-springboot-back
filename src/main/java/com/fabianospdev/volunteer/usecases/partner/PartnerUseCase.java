@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UseCase{
+public class PartnerUseCase{
 
     private final PartnerRepository partnerRepository;
     private final MessageSource messageSource;
 
     @Autowired(required=true)
-    public UseCase( PartnerRepository partnerRepository, MessageSource messageSource) {
+    public PartnerUseCase( PartnerRepository partnerRepository, MessageSource messageSource) {
         this.partnerRepository = partnerRepository;
         this.messageSource = messageSource;
     }

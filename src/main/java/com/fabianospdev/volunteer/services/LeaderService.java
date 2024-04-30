@@ -3,7 +3,7 @@ package com.fabianospdev.volunteer.services;
 import com.fabianospdev.volunteer.dto.LeaderDTO;
 import com.fabianospdev.volunteer.models.Leader;
 import com.fabianospdev.volunteer.repositories.LeaderRepository;
-import com.fabianospdev.volunteer.usecases.leader.UseCase;
+import com.fabianospdev.volunteer.usecases.leader.LeaderUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class LeaderService{
     private LeaderRepository repository;
 
     @Autowired
-    private UseCase useCase;
+    private LeaderUseCase useCase;
 
 
     public List<Leader> findAll() {

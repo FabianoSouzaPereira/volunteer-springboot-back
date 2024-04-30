@@ -1,6 +1,5 @@
 package com.fabianospdev.volunteer.usecases.user;
 
-import com.fabianospdev.volunteer.config.MessageSourceConfig;
 import com.fabianospdev.volunteer.models.User;
 import com.fabianospdev.volunteer.repositories.UserRepository;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
@@ -11,17 +10,16 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
-public class UseCase{
+public class UserUseCase{
 
     private final UserRepository userRepository;
     private final MessageSource messageSource;
 
     @Autowired(required=true)
-    public UseCase( UserRepository userRepository, MessageSource messageSource) {
+    public UserUseCase( UserRepository userRepository, MessageSource messageSource) {
         this.userRepository = userRepository;
         this.messageSource = messageSource;
     }

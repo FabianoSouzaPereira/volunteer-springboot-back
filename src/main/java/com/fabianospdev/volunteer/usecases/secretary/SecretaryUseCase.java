@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UseCase{
+public class SecretaryUseCase{
 
     private final SecretaryRepository secretaryRepository;
     private final MessageSource messageSource;
 
     @Autowired(required=true)
-    public UseCase( SecretaryRepository secretaryRepository, MessageSource messageSource) {
+    public SecretaryUseCase( SecretaryRepository secretaryRepository, MessageSource messageSource) {
         this.secretaryRepository = secretaryRepository;
         this.messageSource = messageSource;
     }

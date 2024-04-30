@@ -3,7 +3,7 @@ package com.fabianospdev.volunteer.controller;
 import com.fabianospdev.volunteer.dto.PastorDTO;
 import com.fabianospdev.volunteer.models.Pastor;
 import com.fabianospdev.volunteer.services.PastorService;
-import com.fabianospdev.volunteer.usecases.pastor.UseCase;
+import com.fabianospdev.volunteer.usecases.pastor.PatnerUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class PastorController{
     @Autowired
     private PastorService service;
 
-    private UseCase pastor;
+    private PatnerUseCase pastor;
 
     @RequestMapping(method=RequestMethod.GET)
     public ResponseEntity<List<PastorDTO>> findAll() {

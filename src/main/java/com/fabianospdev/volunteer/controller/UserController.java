@@ -3,7 +3,7 @@ package com.fabianospdev.volunteer.controller;
 import com.fabianospdev.volunteer.models.User;
 import com.fabianospdev.volunteer.dto.UserDTO;
 import com.fabianospdev.volunteer.services.UserService;
-import com.fabianospdev.volunteer.usecases.user.UseCase;
+import com.fabianospdev.volunteer.usecases.user.UserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class UserController {
     @Autowired
     private UserService service;
 
-    private UseCase user;
+    private UserUseCase user;
 
     @RequestMapping(method=RequestMethod.GET)
     public ResponseEntity<List<UserDTO>> findAll() {

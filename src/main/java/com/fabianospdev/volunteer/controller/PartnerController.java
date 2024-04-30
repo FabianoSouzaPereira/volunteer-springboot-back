@@ -3,7 +3,7 @@ package com.fabianospdev.volunteer.controller;
 import com.fabianospdev.volunteer.dto.PartnerDTO;
 import com.fabianospdev.volunteer.models.Partner;
 import com.fabianospdev.volunteer.services.PartnerService;
-import com.fabianospdev.volunteer.usecases.partner.UseCase;
+import com.fabianospdev.volunteer.usecases.partner.PartnerUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class PartnerController{
     @Autowired
     private PartnerService service;
 
-    private UseCase partner;
+    private PartnerUseCase partner;
 
     @RequestMapping(method=RequestMethod.GET)
     public ResponseEntity<List<PartnerDTO>> findAll() {

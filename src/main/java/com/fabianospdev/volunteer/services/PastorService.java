@@ -5,7 +5,7 @@ package com.fabianospdev.volunteer.services;
 import com.fabianospdev.volunteer.dto.PastorDTO;
 import com.fabianospdev.volunteer.models.Pastor;
 import com.fabianospdev.volunteer.repositories.PastorRepository;
-import com.fabianospdev.volunteer.usecases.pastor.UseCase;
+import com.fabianospdev.volunteer.usecases.pastor.PatnerUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public class PastorService{
     private PastorRepository repository;
 
     @Autowired
-    private UseCase useCase;
+    private PatnerUseCase useCase;
 
 
     public List<Pastor> findAll() {

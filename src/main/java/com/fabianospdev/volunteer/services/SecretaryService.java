@@ -3,7 +3,7 @@ package com.fabianospdev.volunteer.services;
 import com.fabianospdev.volunteer.dto.UserDTO;
 import com.fabianospdev.volunteer.models.User;
 import com.fabianospdev.volunteer.repositories.UserRepository;
-import com.fabianospdev.volunteer.usecases.user.UseCase;
+import com.fabianospdev.volunteer.usecases.user.UserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class SecretaryService{
     private UserRepository repository;
 
     @Autowired
-    private UseCase useCase;
+    private UserUseCase useCase;
 
 
     public List<User> findAll() {

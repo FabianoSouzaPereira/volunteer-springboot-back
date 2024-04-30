@@ -4,7 +4,7 @@ package com.fabianospdev.volunteer.services;
 import com.fabianospdev.volunteer.dto.EmployeeDTO;
 import com.fabianospdev.volunteer.models.Employee;
 import com.fabianospdev.volunteer.repositories.EmployeeRepository;
-import com.fabianospdev.volunteer.usecases.employee.UseCase;
+import com.fabianospdev.volunteer.usecases.employee.EmployeeUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public class EmployeeService {
     private EmployeeRepository repository;
 
     @Autowired
-    private UseCase useCase;
+    private EmployeeUseCase useCase;
 
 
     public List<Employee> findAll() {

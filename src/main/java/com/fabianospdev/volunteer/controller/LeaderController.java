@@ -3,7 +3,7 @@ package com.fabianospdev.volunteer.controller;
 import com.fabianospdev.volunteer.dto.LeaderDTO;
 import com.fabianospdev.volunteer.models.Leader;
 import com.fabianospdev.volunteer.services.LeaderService;
-import com.fabianospdev.volunteer.usecases.leader.UseCase;
+import com.fabianospdev.volunteer.usecases.leader.LeaderUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class LeaderController{
     @Autowired
     private LeaderService service;
 
-    private UseCase leader;
+    private LeaderUseCase leader;
 
     @RequestMapping(method=RequestMethod.GET)
     public ResponseEntity<List<LeaderDTO>> findAll() {
