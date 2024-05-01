@@ -1,9 +1,10 @@
 package com.fabianospdev.volunteer.usecases.employee;
 
+import com.fabianospdev.volunteer.dto.EmployeeDTO;
 import com.fabianospdev.volunteer.models.Employee;
 import com.fabianospdev.volunteer.repositories.EmployeeRepository;
-import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
+import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -24,6 +25,14 @@ public class EmployeeUseCase{
         this.messageSource = messageSource;
     }
 
+    public List<EmployeeDTO> findAllDTO() {
+        return employeeRepository.findAllDTO();
+    }
+
+    public List<Employee> findAllList() {
+        return employeeRepository.findAllList();
+    }
+
     public List<Employee> findAll() {
         return employeeRepository.findAll();
     }
@@ -38,7 +47,7 @@ public class EmployeeUseCase{
     }
 
     public Employee update(Employee employee) {
-                Optional<Employee> obj = employeeRepository.findById(employee.getId());
+        Optional<Employee> obj = employeeRepository.findById(employee.getId());
 
         if (obj.isEmpty()) {
             String message = messageSource.getMessage("object.not.exists", new Object[]{employee.getId()}, LocaleContextHolder.getLocale());
@@ -50,5 +59,14 @@ public class EmployeeUseCase{
 
     public void deleteById(String id) {
         employeeRepository.deleteById(id);
+    }
+
+    private EmployeeDTO convertToEmployeeDTO(Employee employee) {
+
+        if(employee == null){
+            return new EmployeeDTO();
+        }
+
+        return new EmployeeDTO(employee);
     }
 }

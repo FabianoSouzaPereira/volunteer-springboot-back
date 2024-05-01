@@ -1,9 +1,10 @@
 package com.fabianospdev.volunteer.usecases.secretary;
 
+import com.fabianospdev.volunteer.dto.SecretaryDTO;
 import com.fabianospdev.volunteer.models.Secretary;
 import com.fabianospdev.volunteer.repositories.SecretaryRepository;
-import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
+import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -24,6 +25,14 @@ public class SecretaryUseCase{
         this.messageSource = messageSource;
     }
 
+    public List<SecretaryDTO> findAllDTO() {
+        return secretaryRepository.findAllDTO();
+    }
+
+    public List<Secretary> findAllList() {
+        return secretaryRepository.findAllList();
+    }
+
     public List<Secretary> findAll() {
         return secretaryRepository.findAll();
     }
@@ -38,7 +47,7 @@ public class SecretaryUseCase{
     }
 
     public Secretary update(Secretary secretary) {
-                Optional<Secretary> obj = secretaryRepository.findById(secretary.getId());
+        Optional<Secretary> obj = secretaryRepository.findById(secretary.getId());
 
         if (obj.isEmpty()) {
             String message = messageSource.getMessage("object.not.exists", new Object[]{secretary.getId()}, LocaleContextHolder.getLocale());
@@ -50,5 +59,14 @@ public class SecretaryUseCase{
 
     public void deleteById(String id) {
         secretaryRepository.deleteById(id);
+    }
+
+    private SecretaryDTO convertToSecretaryDTO(Secretary secretary) {
+
+        if(secretary == null){
+            return new SecretaryDTO();
+        }
+
+        return new SecretaryDTO(secretary);
     }
 }

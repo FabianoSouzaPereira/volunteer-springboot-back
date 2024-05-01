@@ -1,10 +1,10 @@
 package com.fabianospdev.volunteer.usecases.leader;
 
-
+import com.fabianospdev.volunteer.dto.LeaderDTO;
 import com.fabianospdev.volunteer.models.Leader;
 import com.fabianospdev.volunteer.repositories.LeaderRepository;
-import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
+import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -25,6 +25,14 @@ public class LeaderUseCase{
         this.messageSource = messageSource;
     }
 
+    public List<LeaderDTO> findAllDTO() {
+        return leaderRepository.findAllDTO();
+    }
+
+    public List<Leader> findAllList() {
+        return leaderRepository.findAllList();
+    }
+
     public List<Leader> findAll() {
         return leaderRepository.findAll();
     }
@@ -39,7 +47,7 @@ public class LeaderUseCase{
     }
 
     public Leader update(Leader leader) {
-                Optional<Leader> obj = leaderRepository.findById(leader.getId());
+        Optional<Leader> obj = leaderRepository.findById(leader.getId());
 
         if (obj.isEmpty()) {
             String message = messageSource.getMessage("object.not.exists", new Object[]{leader.getId()}, LocaleContextHolder.getLocale());
@@ -51,5 +59,14 @@ public class LeaderUseCase{
 
     public void deleteById(String id) {
         leaderRepository.deleteById(id);
+    }
+
+    private LeaderDTO convertToLeaderDTO(Leader leader) {
+
+        if(leader == null){
+            return new LeaderDTO();
+        }
+
+        return new LeaderDTO(leader);
     }
 }

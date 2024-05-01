@@ -1,28 +1,41 @@
 package com.fabianospdev.volunteer.services;
 
-
-
-import com.fabianospdev.volunteer.dto.PastorDTO;
 import com.fabianospdev.volunteer.models.Pastor;
+import com.fabianospdev.volunteer.dto.PastorDTO;
 import com.fabianospdev.volunteer.repositories.PastorRepository;
-import com.fabianospdev.volunteer.usecases.pastor.PatnerUseCase;
+import com.fabianospdev.volunteer.usecases.pastor.PastorUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class PastorService{
+public class PastorService {
+
     @Autowired(required=true)
     private PastorRepository repository;
 
-    @Autowired
-    private PatnerUseCase useCase;
+    @Autowired(required=true)
+    private PastorUseCase useCase;
 
 
     public List<Pastor> findAll() {
         return useCase.findAll();
     }
+
+    public List<Pastor> findAllList() {
+        return useCase.findAllList();
+    }
+
+    public List<PastorDTO> findAllDTO() {
+        return useCase.findAllDTO();
+    }
+
+    private PastorDTO convertToPastorDTO( Pastor pastor ) {
+        PastorDTO pastorDTO = new PastorDTO(pastor);
+        return pastorDTO;
+    }
+
 
     public Pastor findById(String id) {
         Pastor obj = useCase.findById(id);
@@ -38,8 +51,6 @@ public class PastorService{
     }
 
     public Pastor update(Pastor obj) {
-        //  Pastor newObj = findById(obj.getId());
-        //  updateData(newObj, obj);
         return useCase.update(obj);
     }
 
@@ -48,7 +59,7 @@ public class PastorService{
         newObj.setEmail(obj.getEmail());
     }
 
-    public Pastor fromDTO( PastorDTO objDto) {
+    public Pastor fromDTO(PastorDTO objDto) {
         return new Pastor(objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone());
     }
 }

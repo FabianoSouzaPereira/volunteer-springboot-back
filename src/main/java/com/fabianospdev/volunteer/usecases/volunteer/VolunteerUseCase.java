@@ -1,9 +1,10 @@
 package com.fabianospdev.volunteer.usecases.volunteer;
 
+import com.fabianospdev.volunteer.dto.VolunteerDTO;
 import com.fabianospdev.volunteer.models.Volunteer;
 import com.fabianospdev.volunteer.repositories.VolunteerRepository;
-import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
+import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -24,6 +25,14 @@ public class VolunteerUseCase{
         this.messageSource = messageSource;
     }
 
+    public List<VolunteerDTO> findAllDTO() {
+        return volunteerRepository.findAllDTO();
+    }
+
+    public List<Volunteer> findAllList() {
+        return volunteerRepository.findAllList();
+    }
+
     public List<Volunteer> findAll() {
         return volunteerRepository.findAll();
     }
@@ -38,7 +47,7 @@ public class VolunteerUseCase{
     }
 
     public Volunteer update(Volunteer volunteer) {
-                Optional<Volunteer> obj = volunteerRepository.findById(volunteer.getId());
+        Optional<Volunteer> obj = volunteerRepository.findById(volunteer.getId());
 
         if (obj.isEmpty()) {
             String message = messageSource.getMessage("object.not.exists", new Object[]{volunteer.getId()}, LocaleContextHolder.getLocale());
@@ -50,5 +59,14 @@ public class VolunteerUseCase{
 
     public void deleteById(String id) {
         volunteerRepository.deleteById(id);
+    }
+
+    private VolunteerDTO convertToVolunteerDTO(Volunteer volunteer) {
+
+        if(volunteer == null){
+            return new VolunteerDTO();
+        }
+
+        return new VolunteerDTO(volunteer);
     }
 }

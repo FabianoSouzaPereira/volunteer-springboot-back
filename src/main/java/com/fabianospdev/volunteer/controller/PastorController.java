@@ -1,9 +1,9 @@
 package com.fabianospdev.volunteer.controller;
 
-import com.fabianospdev.volunteer.dto.PastorDTO;
 import com.fabianospdev.volunteer.models.Pastor;
+import com.fabianospdev.volunteer.dto.PastorDTO;
 import com.fabianospdev.volunteer.services.PastorService;
-import com.fabianospdev.volunteer.usecases.pastor.PatnerUseCase;
+import com.fabianospdev.volunteer.usecases.pastor.PastorUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,26 +11,25 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value="/pastors")
-public class PastorController{
+public class PastorController {
 
     @Autowired
     private PastorService service;
 
-    private PatnerUseCase pastor;
-
-    @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<List<PastorDTO>> findAll() {
-        List<Pastor> list = service.findAll();
-        List<PastorDTO> listDto = list.stream().map(x -> new PastorDTO(x)).collect(Collectors.toList());
-        return ResponseEntity.ok().body(listDto);
-    }
+    @Autowired(required=true)
+    private PastorUseCase pastor;
 
     @RequestMapping(value="/find-all-list", method=RequestMethod.GET)
-    public ResponseEntity<List<Pastor>> findAllList() {
+    public ResponseEntity<List<PastorDTO>> findAllDTO() {
+        List<PastorDTO> list = service.findAllDTO();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @RequestMapping(method=RequestMethod.GET)
+    public ResponseEntity<List<Pastor>> findAll() {
         List<Pastor> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }

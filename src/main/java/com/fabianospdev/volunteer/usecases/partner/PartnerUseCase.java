@@ -1,9 +1,10 @@
 package com.fabianospdev.volunteer.usecases.partner;
 
+import com.fabianospdev.volunteer.dto.PartnerDTO;
 import com.fabianospdev.volunteer.models.Partner;
 import com.fabianospdev.volunteer.repositories.PartnerRepository;
-import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
+import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -24,6 +25,14 @@ public class PartnerUseCase{
         this.messageSource = messageSource;
     }
 
+    public List<PartnerDTO> findAllDTO() {
+        return partnerRepository.findAllDTO();
+    }
+
+    public List<Partner> findAllList() {
+        return partnerRepository.findAllList();
+    }
+
     public List<Partner> findAll() {
         return partnerRepository.findAll();
     }
@@ -38,7 +47,7 @@ public class PartnerUseCase{
     }
 
     public Partner update(Partner partner) {
-                Optional<Partner> obj = partnerRepository.findById(partner.getId());
+        Optional<Partner> obj = partnerRepository.findById(partner.getId());
 
         if (obj.isEmpty()) {
             String message = messageSource.getMessage("object.not.exists", new Object[]{partner.getId()}, LocaleContextHolder.getLocale());
@@ -50,5 +59,14 @@ public class PartnerUseCase{
 
     public void deleteById(String id) {
         partnerRepository.deleteById(id);
+    }
+
+    private PartnerDTO convertToPartnerDTO(Partner partner) {
+
+        if(partner == null){
+            return new PartnerDTO();
+        }
+
+        return new PartnerDTO(partner);
     }
 }

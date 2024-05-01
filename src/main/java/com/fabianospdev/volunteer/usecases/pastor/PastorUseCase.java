@@ -1,9 +1,10 @@
 package com.fabianospdev.volunteer.usecases.pastor;
 
+import com.fabianospdev.volunteer.dto.PastorDTO;
 import com.fabianospdev.volunteer.models.Pastor;
 import com.fabianospdev.volunteer.repositories.PastorRepository;
-import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
+import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -13,15 +14,23 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PatnerUseCase{
+public class PastorUseCase{
 
     private final PastorRepository pastorRepository;
     private final MessageSource messageSource;
 
     @Autowired(required=true)
-    public PatnerUseCase( PastorRepository pastorRepository, MessageSource messageSource) {
+    public PastorUseCase( PastorRepository pastorRepository, MessageSource messageSource) {
         this.pastorRepository = pastorRepository;
         this.messageSource = messageSource;
+    }
+
+    public List<PastorDTO> findAllDTO() {
+        return pastorRepository.findAllDTO();
+    }
+
+    public List<Pastor> findAllList() {
+        return pastorRepository.findAllList();
     }
 
     public List<Pastor> findAll() {
@@ -38,7 +47,7 @@ public class PatnerUseCase{
     }
 
     public Pastor update(Pastor pastor) {
-                Optional<Pastor> obj = pastorRepository.findById(pastor.getId());
+        Optional<Pastor> obj = pastorRepository.findById(pastor.getId());
 
         if (obj.isEmpty()) {
             String message = messageSource.getMessage("object.not.exists", new Object[]{pastor.getId()}, LocaleContextHolder.getLocale());
@@ -50,5 +59,14 @@ public class PatnerUseCase{
 
     public void deleteById(String id) {
         pastorRepository.deleteById(id);
+    }
+
+    private PastorDTO convertToPastorDTO(Pastor pastor) {
+
+        if(pastor == null){
+            return new PastorDTO();
+        }
+
+        return new PastorDTO(pastor);
     }
 }
