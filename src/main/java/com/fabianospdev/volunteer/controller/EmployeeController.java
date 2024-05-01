@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.controller;
 
-import com.fabianospdev.volunteer.dto.EmployeeDTO;
 import com.fabianospdev.volunteer.models.Employee;
+import com.fabianospdev.volunteer.dto.EmployeeDTO;
 import com.fabianospdev.volunteer.services.EmployeeService;
 import com.fabianospdev.volunteer.usecases.employee.EmployeeUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,26 +11,25 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value="/employees")
-public class EmployeeController{
+public class EmployeeController {
 
     @Autowired
     private EmployeeService service;
 
+    @Autowired(required=true)
     private EmployeeUseCase employee;
 
-    @RequestMapping(method= RequestMethod.GET)
-    public ResponseEntity<List<EmployeeDTO>> findAll() {
-        List<Employee> list = service.findAll();
-        List<EmployeeDTO> listDto = list.stream().map(x -> new EmployeeDTO(x)).collect( Collectors.toList());
-        return ResponseEntity.ok().body(listDto);
+    @RequestMapping(value="/find-all-list", method=RequestMethod.GET)
+    public ResponseEntity<List<EmployeeDTO>> findAllDTO() {
+        List<EmployeeDTO> list = service.findAllDTO();
+        return ResponseEntity.ok().body(list);
     }
 
-    @RequestMapping(value="/find-all-list", method=RequestMethod.GET)
-    public ResponseEntity<List<Employee>> findAllList() {
+    @RequestMapping(method=RequestMethod.GET)
+    public ResponseEntity<List<Employee>> findAll() {
         List<Employee> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }

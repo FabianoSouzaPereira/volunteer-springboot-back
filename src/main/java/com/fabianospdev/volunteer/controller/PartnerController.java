@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.controller;
 
-import com.fabianospdev.volunteer.dto.PartnerDTO;
 import com.fabianospdev.volunteer.models.Partner;
+import com.fabianospdev.volunteer.dto.PartnerDTO;
 import com.fabianospdev.volunteer.services.PartnerService;
 import com.fabianospdev.volunteer.usecases.partner.PartnerUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,26 +11,25 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value="/partners")
-public class PartnerController{
+public class PartnerController {
 
     @Autowired
     private PartnerService service;
 
+    @Autowired(required=true)
     private PartnerUseCase partner;
 
-    @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<List<PartnerDTO>> findAll() {
-        List<Partner> list = service.findAll();
-        List<PartnerDTO> listDto = list.stream().map(x -> new PartnerDTO(x)).collect(Collectors.toList());
-        return ResponseEntity.ok().body(listDto);
+    @RequestMapping(value="/find-all-list", method=RequestMethod.GET)
+    public ResponseEntity<List<PartnerDTO>> findAllDTO() {
+        List<PartnerDTO> list = service.findAllDTO();
+        return ResponseEntity.ok().body(list);
     }
 
-    @RequestMapping(value="/find-all-list", method=RequestMethod.GET)
-    public ResponseEntity<List<Partner>> findAllList() {
+    @RequestMapping(method=RequestMethod.GET)
+    public ResponseEntity<List<Partner>> findAll() {
         List<Partner> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }

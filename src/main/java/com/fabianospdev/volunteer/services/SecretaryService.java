@@ -1,33 +1,48 @@
 package com.fabianospdev.volunteer.services;
 
-import com.fabianospdev.volunteer.dto.UserDTO;
-import com.fabianospdev.volunteer.models.User;
-import com.fabianospdev.volunteer.repositories.UserRepository;
-import com.fabianospdev.volunteer.usecases.user.UserUseCase;
+import com.fabianospdev.volunteer.models.Secretary;
+import com.fabianospdev.volunteer.dto.SecretaryDTO;
+import com.fabianospdev.volunteer.repositories.SecretaryRepository;
+import com.fabianospdev.volunteer.usecases.secretary.SecretaryUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class SecretaryService{
+public class SecretaryService {
+
     @Autowired(required=true)
-    private UserRepository repository;
+    private SecretaryRepository repository;
 
-    @Autowired
-    private UserUseCase useCase;
+    @Autowired(required=true)
+    private SecretaryUseCase useCase;
 
 
-    public List<User> findAll() {
+    public List<Secretary> findAll() {
         return useCase.findAll();
     }
 
-    public User findById(String id) {
-        User obj = useCase.findById(id);
+    public List<Secretary> findAllList() {
+        return useCase.findAllList();
+    }
+
+    public List<SecretaryDTO> findAllDTO() {
+        return useCase.findAllDTO();
+    }
+
+    private SecretaryDTO convertToSecretaryDTO( Secretary secretary ) {
+        SecretaryDTO secretaryDTO = new SecretaryDTO(secretary);
+        return secretaryDTO;
+    }
+
+
+    public Secretary findById(String id) {
+        Secretary obj = useCase.findById(id);
         return obj;
     }
 
-    public User insert(User obj) {
+    public Secretary insert(Secretary obj) {
         return useCase.insert(obj);
     }
 
@@ -35,18 +50,16 @@ public class SecretaryService{
         useCase.deleteById(id);
     }
 
-    public User update(User obj) {
-        //  User newObj = findById(obj.getId());
-        //  updateData(newObj, obj);
+    public Secretary update(Secretary obj) {
         return useCase.update(obj);
     }
 
-    private void updateData(User newObj, User obj) {
+    private void updateData(Secretary newObj, Secretary obj) {
         newObj.setName(obj.getName());
         newObj.setEmail(obj.getEmail());
     }
 
-    public User fromDTO( UserDTO objDto) {
-        return new User(objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone());
+    public Secretary fromDTO(SecretaryDTO objDto) {
+        return new Secretary(objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone());
     }
 }

@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.controller;
 
-import com.fabianospdev.volunteer.dto.LeaderDTO;
 import com.fabianospdev.volunteer.models.Leader;
+import com.fabianospdev.volunteer.dto.LeaderDTO;
 import com.fabianospdev.volunteer.services.LeaderService;
 import com.fabianospdev.volunteer.usecases.leader.LeaderUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,26 +11,25 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value="/leaders")
-public class LeaderController{
+public class LeaderController {
 
     @Autowired
     private LeaderService service;
 
+    @Autowired(required=true)
     private LeaderUseCase leader;
 
-    @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<List<LeaderDTO>> findAll() {
-        List<Leader> list = service.findAll();
-        List<LeaderDTO> listDto = list.stream().map(x -> new LeaderDTO(x)).collect(Collectors.toList());
-        return ResponseEntity.ok().body(listDto);
+    @RequestMapping(value="/find-all-list", method=RequestMethod.GET)
+    public ResponseEntity<List<LeaderDTO>> findAllDTO() {
+        List<LeaderDTO> list = service.findAllDTO();
+        return ResponseEntity.ok().body(list);
     }
 
-    @RequestMapping(value="/find-all-list", method=RequestMethod.GET)
-    public ResponseEntity<List<Leader>> findAllList() {
+    @RequestMapping(method=RequestMethod.GET)
+    public ResponseEntity<List<Leader>> findAll() {
         List<Leader> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }

@@ -1,9 +1,9 @@
 package com.fabianospdev.volunteer.services;
 
-import com.fabianospdev.volunteer.dto.UserDTO;
-import com.fabianospdev.volunteer.models.User;
-import com.fabianospdev.volunteer.repositories.UserRepository;
-import com.fabianospdev.volunteer.usecases.user.UserUseCase;
+import com.fabianospdev.volunteer.models.Volunteer;
+import com.fabianospdev.volunteer.dto.VolunteerDTO;
+import com.fabianospdev.volunteer.repositories.VolunteerRepository;
+import com.fabianospdev.volunteer.usecases.volunteer.VolunteerUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,23 +11,38 @@ import java.util.List;
 
 @Service
 public class VolunteerService {
+
     @Autowired(required=true)
-    private UserRepository repository;
+    private VolunteerRepository repository;
 
-    @Autowired
-    private UserUseCase useCase;
+    @Autowired(required=true)
+    private VolunteerUseCase useCase;
 
 
-    public List<User> findAll() {
+    public List<Volunteer> findAll() {
         return useCase.findAll();
     }
 
-    public User findById(String id) {
-        User obj = useCase.findById(id);
+    public List<Volunteer> findAllList() {
+        return useCase.findAllList();
+    }
+
+    public List<VolunteerDTO> findAllDTO() {
+        return useCase.findAllDTO();
+    }
+
+    private VolunteerDTO convertToVolunteerDTO( Volunteer volunteer ) {
+        VolunteerDTO volunteerDTO = new VolunteerDTO(volunteer);
+        return volunteerDTO;
+    }
+
+
+    public Volunteer findById(String id) {
+        Volunteer obj = useCase.findById(id);
         return obj;
     }
 
-    public User insert(User obj) {
+    public Volunteer insert(Volunteer obj) {
         return useCase.insert(obj);
     }
 
@@ -35,18 +50,16 @@ public class VolunteerService {
         useCase.deleteById(id);
     }
 
-    public User update(User obj) {
-        //  User newObj = findById(obj.getId());
-        //  updateData(newObj, obj);
+    public Volunteer update(Volunteer obj) {
         return useCase.update(obj);
     }
 
-    private void updateData(User newObj, User obj) {
+    private void updateData(Volunteer newObj, Volunteer obj) {
         newObj.setName(obj.getName());
         newObj.setEmail(obj.getEmail());
     }
 
-    public User fromDTO( UserDTO objDto) {
-        return new User(objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone());
+    public Volunteer fromDTO(VolunteerDTO objDto) {
+        return new Volunteer(objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone());
     }
 }
