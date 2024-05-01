@@ -27,11 +27,8 @@ public class UserUseCase{
         this.messageSource = messageSource;
     }
 
-    public List<UserDTO> findAllDTO(User user) {
-        Example<User> example = Example.of(user);
-        return userRepository.findAll(example).stream()
-                .map(this::convertToUserDTO)
-                .collect( Collectors.toList());
+    public List<UserDTO> findAllDTO() {
+        return userRepository.findAllDTO();
     }
 
     public List<User> findAllList() {

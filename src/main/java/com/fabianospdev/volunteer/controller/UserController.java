@@ -22,15 +22,15 @@ public class UserController {
     @Autowired(required=true)
     private UserUseCase user;
 
-    @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<List<UserDTO>> findAll() {
-        List<UserDTO> list = service.findAllDTO(new User().getDefaultExemple());
+    @RequestMapping(value="/find-all-list", method=RequestMethod.GET)
+    public ResponseEntity<List<UserDTO>> findAllDTO() {
+        List<UserDTO> list = service.findAllDTO();
         return ResponseEntity.ok().body(list);
     }
 
-    @RequestMapping(value="/find-all-list", method=RequestMethod.GET)
-    public ResponseEntity<List<User>> findAllList() {
-        List<User> list = service.findAllList();
+    @RequestMapping(method=RequestMethod.GET)
+    public ResponseEntity<List<User>> findAll() {
+        List<User> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 

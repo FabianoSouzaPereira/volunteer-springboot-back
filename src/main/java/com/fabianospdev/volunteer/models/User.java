@@ -141,14 +141,6 @@ public class User implements Serializable {
         this.job = job;
     }
 
-    @JsonBackReference
-    public User getDefaultExemple() {
-        User exampleUser = new User("1", "name", 30, "group", "role",
-                new ArrayList<>( Arrays.asList("Coding", "Testing", "Debugging")),
-                "Active", "+55123456789", "example@example.com","123 Main Street, City, Country", "examplejob");
-        return exampleUser;
-    }
-
     @Override
     public boolean equals( Object o ) {
         if ( this == o ) return true;

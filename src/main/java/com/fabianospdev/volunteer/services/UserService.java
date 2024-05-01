@@ -6,8 +6,6 @@ import com.fabianospdev.volunteer.repositories.UserRepository;
 import com.fabianospdev.volunteer.usecases.user.UserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.data.mongodb.repository.Query;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,11 +29,8 @@ public class UserService {
         return useCase.findAllList();
     }
 
-    public List<UserDTO> findAllDTO(User exampleUser) {
-        Example<User> example = Example.of(exampleUser);
-        return useCase.findAll().stream()
-                .map( ( examples ) -> convertToUserDTO( examples ) )
-                .collect( Collectors.toList());
+    public List<UserDTO> findAllDTO() {
+        return useCase.findAllDTO();
     }
 
     private UserDTO convertToUserDTO( User user ) {
@@ -58,8 +53,6 @@ public class UserService {
     }
 
     public User update(User obj) {
-      //  User newObj = findById(obj.getId());
-      //  updateData(newObj, obj);
         return useCase.update(obj);
     }
 
