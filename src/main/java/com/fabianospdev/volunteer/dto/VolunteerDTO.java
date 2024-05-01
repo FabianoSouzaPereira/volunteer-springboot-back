@@ -4,7 +4,8 @@ import com.fabianospdev.volunteer.models.Volunteer;
 
 import java.io.Serializable;
 
-public class VolunteerDTO implements Serializable {
+public class VolunteerDTO implements Serializable{
+    private static final long serialVersionUID = 1L;
 
     private String id;
     private String name;
@@ -12,21 +13,21 @@ public class VolunteerDTO implements Serializable {
     private String email;
 
 
+    public VolunteerDTO() { }
+
+    public VolunteerDTO( Volunteer obj ) {
+        id = obj.getId();
+        name = obj.getName();
+        email = obj.getEmail();
+        phone = obj.getPhone();
+    }
+
     public String getPhone() {
         return phone;
     }
 
     public void setPhone( String phone ) {
         this.phone = phone;
-    }
-
-    public VolunteerDTO(){}
-
-    public VolunteerDTO( Volunteer obj){
-        id = obj.getId();
-        name = obj.getName();
-        email = obj.getEmail();
-        phone = obj.getPhone();
     }
 
     public String getId() {

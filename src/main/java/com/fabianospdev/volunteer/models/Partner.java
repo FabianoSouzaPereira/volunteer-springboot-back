@@ -4,13 +4,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-@Document(collection="partner")
-public class Partner implements Serializable {
+@Document(collection = "partner")
+public class Partner implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -138,12 +136,6 @@ public class Partner implements Serializable {
         this.job = job;
     }
 
-    public Partner getDefaultExemple() {
-        Partner exampleUser = new Partner("1", "name", 30, "group", "role",
-                new ArrayList<>( Arrays.asList("Coding", "Testing", "Debugging")),
-                "Active", "+55123456789", "example@example.com","123 Main Street, City, Country", "examplejob");
-        return exampleUser;
-    }
 
     @Override
     public boolean equals( Object o ) {

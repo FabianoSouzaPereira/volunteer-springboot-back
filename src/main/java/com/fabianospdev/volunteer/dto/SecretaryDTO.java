@@ -4,7 +4,8 @@ import com.fabianospdev.volunteer.models.Secretary;
 
 import java.io.Serializable;
 
-public class SecretaryDTO implements Serializable {
+public class SecretaryDTO implements Serializable{
+    private static final long serialVersionUID = 1L;
 
     private String id;
     private String name;
@@ -12,21 +13,21 @@ public class SecretaryDTO implements Serializable {
     private String email;
 
 
+    public SecretaryDTO() { }
+
+    public SecretaryDTO( Secretary obj ) {
+        id = obj.getId();
+        name = obj.getName();
+        email = obj.getEmail();
+        phone = obj.getPhone();
+    }
+
     public String getPhone() {
         return phone;
     }
 
     public void setPhone( String phone ) {
         this.phone = phone;
-    }
-
-    public SecretaryDTO(){}
-
-    public SecretaryDTO( Secretary obj){
-        id = obj.getId();
-        name = obj.getName();
-        email = obj.getEmail();
-        phone = obj.getPhone();
     }
 
     public String getId() {

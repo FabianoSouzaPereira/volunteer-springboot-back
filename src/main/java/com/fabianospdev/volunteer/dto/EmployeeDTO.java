@@ -2,10 +2,10 @@ package com.fabianospdev.volunteer.dto;
 
 import com.fabianospdev.volunteer.models.Employee;
 
-
 import java.io.Serializable;
 
-public class EmployeeDTO implements Serializable {
+public class EmployeeDTO implements Serializable{
+    private static final long serialVersionUID = 1L;
 
     private String id;
     private String name;
@@ -13,21 +13,21 @@ public class EmployeeDTO implements Serializable {
     private String email;
 
 
+    public EmployeeDTO() { }
+
+    public EmployeeDTO( Employee obj ) {
+        id = obj.getId();
+        name = obj.getName();
+        email = obj.getEmail();
+        phone = obj.getPhone();
+    }
+
     public String getPhone() {
         return phone;
     }
 
     public void setPhone( String phone ) {
         this.phone = phone;
-    }
-
-    public EmployeeDTO(){}
-
-    public EmployeeDTO( Employee obj){
-        id = obj.getId();
-        name = obj.getName();
-        email = obj.getEmail();
-        phone = obj.getPhone();
     }
 
     public String getId() {

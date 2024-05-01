@@ -2,10 +2,10 @@ package com.fabianospdev.volunteer.dto;
 
 import com.fabianospdev.volunteer.models.Leader;
 
-
 import java.io.Serializable;
 
-public class LeaderDTO implements Serializable {
+public class LeaderDTO implements Serializable{
+    private static final long serialVersionUID = 1L;
 
     private String id;
     private String name;
@@ -13,21 +13,21 @@ public class LeaderDTO implements Serializable {
     private String email;
 
 
+    public LeaderDTO() { }
+
+    public LeaderDTO( Leader obj ) {
+        id = obj.getId();
+        name = obj.getName();
+        email = obj.getEmail();
+        phone = obj.getPhone();
+    }
+
     public String getPhone() {
         return phone;
     }
 
     public void setPhone( String phone ) {
         this.phone = phone;
-    }
-
-    public LeaderDTO(){}
-
-    public LeaderDTO( Leader obj){
-        id = obj.getId();
-        name = obj.getName();
-        email = obj.getEmail();
-        phone = obj.getPhone();
     }
 
     public String getId() {

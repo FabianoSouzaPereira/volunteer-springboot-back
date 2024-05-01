@@ -4,13 +4,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-@Document(collection="pastor")
-public class Pastor implements Serializable {
+@Document(collection = "pastor")
+public class Pastor implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -136,13 +134,6 @@ public class Pastor implements Serializable {
 
     public void setJob( String job ) {
         this.job = job;
-    }
-
-    public Pastor getDefaultExemple() {
-        Pastor exampleUser = new Pastor("1", "name", 30, "group", "role",
-                new ArrayList<>( Arrays.asList("Coding", "Testing", "Debugging")),
-                "Active", "+55123456789", "example@example.com","123 Main Street, City, Country", "examplejob");
-        return exampleUser;
     }
 
     @Override

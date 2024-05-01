@@ -2,10 +2,10 @@ package com.fabianospdev.volunteer.dto;
 
 import com.fabianospdev.volunteer.models.Pastor;
 
-
 import java.io.Serializable;
 
-public class PastorDTO implements Serializable {
+public class PastorDTO implements Serializable{
+    private static final long serialVersionUID = 1L;
 
     private String id;
     private String name;
@@ -13,21 +13,21 @@ public class PastorDTO implements Serializable {
     private String email;
 
 
+    public PastorDTO() { }
+
+    public PastorDTO( Pastor obj ) {
+        id = obj.getId();
+        name = obj.getName();
+        email = obj.getEmail();
+        phone = obj.getPhone();
+    }
+
     public String getPhone() {
         return phone;
     }
 
     public void setPhone( String phone ) {
         this.phone = phone;
-    }
-
-    public PastorDTO(){}
-
-    public PastorDTO( Pastor obj){
-        id = obj.getId();
-        name = obj.getName();
-        email = obj.getEmail();
-        phone = obj.getPhone();
     }
 
     public String getId() {
