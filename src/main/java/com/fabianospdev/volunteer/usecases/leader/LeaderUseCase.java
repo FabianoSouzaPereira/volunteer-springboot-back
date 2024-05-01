@@ -3,8 +3,8 @@ package com.fabianospdev.volunteer.usecases.leader;
 import com.fabianospdev.volunteer.dto.LeaderDTO;
 import com.fabianospdev.volunteer.models.Leader;
 import com.fabianospdev.volunteer.repositories.LeaderRepository;
-import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
+import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -19,8 +19,8 @@ public class LeaderUseCase{
     private final LeaderRepository leaderRepository;
     private final MessageSource messageSource;
 
-    @Autowired(required=true)
-    public LeaderUseCase( LeaderRepository leaderRepository, MessageSource messageSource) {
+    @Autowired(required = true)
+    public LeaderUseCase( LeaderRepository leaderRepository, MessageSource messageSource ) {
         this.leaderRepository = leaderRepository;
         this.messageSource = messageSource;
     }
@@ -29,44 +29,41 @@ public class LeaderUseCase{
         return leaderRepository.findAllDTO();
     }
 
-    public List<Leader> findAllList() {
-        return leaderRepository.findAllList();
-    }
 
     public List<Leader> findAll() {
         return leaderRepository.findAll();
     }
 
-    public Leader findById(String id) {
-        Optional<Leader> obj = leaderRepository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found"));
+    public Leader findById( String id ) {
+        Optional<Leader> obj = leaderRepository.findById( id );
+        return obj.orElseThrow( () -> new ObjectNotFoundException( "Object not found" ) );
     }
 
-    public Leader insert(Leader leader) {
-        return leaderRepository.insert(leader);
+    public Leader insert( Leader leader ) {
+        return leaderRepository.insert( leader );
     }
 
-    public Leader update(Leader leader) {
-        Optional<Leader> obj = leaderRepository.findById(leader.getId());
+    public Leader update( Leader leader ) {
+        Optional<Leader> obj = leaderRepository.findById( leader.getId() );
 
-        if (obj.isEmpty()) {
-            String message = messageSource.getMessage("object.not.exists", new Object[]{leader.getId()}, LocaleContextHolder.getLocale());
-            throw new ObjectNotExistsException(message);
+        if ( obj.isEmpty() ) {
+            String message = messageSource.getMessage( "object.not.exists", new Object[]{leader.getId()}, LocaleContextHolder.getLocale() );
+            throw new ObjectNotExistsException( message );
         }
 
-        return leaderRepository.save(leader);
+        return leaderRepository.save( leader );
     }
 
-    public void deleteById(String id) {
-        leaderRepository.deleteById(id);
+    public void deleteById( String id ) {
+        leaderRepository.deleteById( id );
     }
 
-    private LeaderDTO convertToLeaderDTO(Leader leader) {
+    private LeaderDTO convertToLeaderDTO( Leader leader ) {
 
-        if(leader == null){
+        if ( leader == null ) {
             return new LeaderDTO();
         }
 
-        return new LeaderDTO(leader);
+        return new LeaderDTO( leader );
     }
 }

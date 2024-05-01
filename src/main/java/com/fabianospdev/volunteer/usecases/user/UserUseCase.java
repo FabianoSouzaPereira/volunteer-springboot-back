@@ -3,8 +3,8 @@ package com.fabianospdev.volunteer.usecases.user;
 import com.fabianospdev.volunteer.dto.UserDTO;
 import com.fabianospdev.volunteer.models.User;
 import com.fabianospdev.volunteer.repositories.UserRepository;
-import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
+import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -19,8 +19,8 @@ public class UserUseCase{
     private final UserRepository userRepository;
     private final MessageSource messageSource;
 
-    @Autowired(required=true)
-    public UserUseCase( UserRepository userRepository, MessageSource messageSource) {
+    @Autowired(required = true)
+    public UserUseCase( UserRepository userRepository, MessageSource messageSource ) {
         this.userRepository = userRepository;
         this.messageSource = messageSource;
     }
@@ -29,44 +29,40 @@ public class UserUseCase{
         return userRepository.findAllDTO();
     }
 
-    public List<User> findAllList() {
-        return userRepository.findAllList();
-    }
-
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
-    public User findById(String id) {
-        Optional<User> obj = userRepository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found"));
+    public User findById( String id ) {
+        Optional<User> obj = userRepository.findById( id );
+        return obj.orElseThrow( () -> new ObjectNotFoundException( "Object not found" ) );
     }
 
-    public User insert(User user) {
-        return userRepository.insert(user);
+    public User insert( User user ) {
+        return userRepository.insert( user );
     }
 
-    public User update(User user) {
-                Optional<User> obj = userRepository.findById(user.getId());
+    public User update( User user ) {
+        Optional<User> obj = userRepository.findById( user.getId() );
 
-        if (obj.isEmpty()) {
-            String message = messageSource.getMessage("object.not.exists", new Object[]{user.getId()}, LocaleContextHolder.getLocale());
-            throw new ObjectNotExistsException(message);
+        if ( obj.isEmpty() ) {
+            String message = messageSource.getMessage( "object.not.exists", new Object[]{user.getId()}, LocaleContextHolder.getLocale() );
+            throw new ObjectNotExistsException( message );
         }
 
-        return userRepository.save(user);
+        return userRepository.save( user );
     }
 
-    public void deleteById(String id) {
-        userRepository.deleteById(id);
+    public void deleteById( String id ) {
+        userRepository.deleteById( id );
     }
 
-    private UserDTO convertToUserDTO(User user) {
+    private UserDTO convertToUserDTO( User user ) {
 
-        if(user == null){
+        if ( user == null ) {
             return new UserDTO();
         }
 
-        return new UserDTO(user);
+        return new UserDTO( user );
     }
 }

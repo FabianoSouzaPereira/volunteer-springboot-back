@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.services;
 
-import com.fabianospdev.volunteer.models.Partner;
 import com.fabianospdev.volunteer.dto.PartnerDTO;
+import com.fabianospdev.volunteer.models.Partner;
 import com.fabianospdev.volunteer.repositories.PartnerRepository;
 import com.fabianospdev.volunteer.usecases.partner.PartnerUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PartnerService {
+public class PartnerService{
 
-    @Autowired(required=true)
+    @Autowired(required = true)
     private PartnerRepository repository;
 
-    @Autowired(required=true)
+    @Autowired(required = true)
     private PartnerUseCase useCase;
 
 
@@ -23,43 +23,40 @@ public class PartnerService {
         return useCase.findAll();
     }
 
-    public List<Partner> findAllList() {
-        return useCase.findAllList();
-    }
 
     public List<PartnerDTO> findAllDTO() {
         return useCase.findAllDTO();
     }
 
     private PartnerDTO convertToPartnerDTO( Partner partner ) {
-        PartnerDTO partnerDTO = new PartnerDTO(partner);
+        PartnerDTO partnerDTO = new PartnerDTO( partner );
         return partnerDTO;
     }
 
 
-    public Partner findById(String id) {
-        Partner obj = useCase.findById(id);
+    public Partner findById( String id ) {
+        Partner obj = useCase.findById( id );
         return obj;
     }
 
-    public Partner insert(Partner obj) {
-        return useCase.insert(obj);
+    public Partner insert( Partner obj ) {
+        return useCase.insert( obj );
     }
 
-    public void delete(String id) {
-        useCase.deleteById(id);
+    public void delete( String id ) {
+        useCase.deleteById( id );
     }
 
-    public Partner update(Partner obj) {
-        return useCase.update(obj);
+    public Partner update( Partner obj ) {
+        return useCase.update( obj );
     }
 
-    private void updateData(Partner newObj, Partner obj) {
-        newObj.setName(obj.getName());
-        newObj.setEmail(obj.getEmail());
+    private void updateData( Partner newObj, Partner obj ) {
+        newObj.setName( obj.getName() );
+        newObj.setEmail( obj.getEmail() );
     }
 
-    public Partner fromDTO(PartnerDTO objDto) {
-        return new Partner(objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone());
+    public Partner fromDTO( PartnerDTO objDto ) {
+        return new Partner( objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone() );
     }
 }

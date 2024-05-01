@@ -3,8 +3,8 @@ package com.fabianospdev.volunteer.usecases.employee;
 import com.fabianospdev.volunteer.dto.EmployeeDTO;
 import com.fabianospdev.volunteer.models.Employee;
 import com.fabianospdev.volunteer.repositories.EmployeeRepository;
-import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
+import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -19,8 +19,8 @@ public class EmployeeUseCase{
     private final EmployeeRepository employeeRepository;
     private final MessageSource messageSource;
 
-    @Autowired(required=true)
-    public EmployeeUseCase( EmployeeRepository employeeRepository, MessageSource messageSource) {
+    @Autowired(required = true)
+    public EmployeeUseCase( EmployeeRepository employeeRepository, MessageSource messageSource ) {
         this.employeeRepository = employeeRepository;
         this.messageSource = messageSource;
     }
@@ -29,44 +29,41 @@ public class EmployeeUseCase{
         return employeeRepository.findAllDTO();
     }
 
-    public List<Employee> findAllList() {
-        return employeeRepository.findAllList();
-    }
 
     public List<Employee> findAll() {
         return employeeRepository.findAll();
     }
 
-    public Employee findById(String id) {
-        Optional<Employee> obj = employeeRepository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found"));
+    public Employee findById( String id ) {
+        Optional<Employee> obj = employeeRepository.findById( id );
+        return obj.orElseThrow( () -> new ObjectNotFoundException( "Object not found" ) );
     }
 
-    public Employee insert(Employee employee) {
-        return employeeRepository.insert(employee);
+    public Employee insert( Employee employee ) {
+        return employeeRepository.insert( employee );
     }
 
-    public Employee update(Employee employee) {
-        Optional<Employee> obj = employeeRepository.findById(employee.getId());
+    public Employee update( Employee employee ) {
+        Optional<Employee> obj = employeeRepository.findById( employee.getId() );
 
-        if (obj.isEmpty()) {
-            String message = messageSource.getMessage("object.not.exists", new Object[]{employee.getId()}, LocaleContextHolder.getLocale());
-            throw new ObjectNotExistsException(message);
+        if ( obj.isEmpty() ) {
+            String message = messageSource.getMessage( "object.not.exists", new Object[]{employee.getId()}, LocaleContextHolder.getLocale() );
+            throw new ObjectNotExistsException( message );
         }
 
-        return employeeRepository.save(employee);
+        return employeeRepository.save( employee );
     }
 
-    public void deleteById(String id) {
-        employeeRepository.deleteById(id);
+    public void deleteById( String id ) {
+        employeeRepository.deleteById( id );
     }
 
-    private EmployeeDTO convertToEmployeeDTO(Employee employee) {
+    private EmployeeDTO convertToEmployeeDTO( Employee employee ) {
 
-        if(employee == null){
+        if ( employee == null ) {
             return new EmployeeDTO();
         }
 
-        return new EmployeeDTO(employee);
+        return new EmployeeDTO( employee );
     }
 }

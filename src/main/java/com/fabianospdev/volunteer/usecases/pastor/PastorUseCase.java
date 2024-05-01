@@ -3,8 +3,8 @@ package com.fabianospdev.volunteer.usecases.pastor;
 import com.fabianospdev.volunteer.dto.PastorDTO;
 import com.fabianospdev.volunteer.models.Pastor;
 import com.fabianospdev.volunteer.repositories.PastorRepository;
-import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
+import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -19,8 +19,8 @@ public class PastorUseCase{
     private final PastorRepository pastorRepository;
     private final MessageSource messageSource;
 
-    @Autowired(required=true)
-    public PastorUseCase( PastorRepository pastorRepository, MessageSource messageSource) {
+    @Autowired(required = true)
+    public PastorUseCase( PastorRepository pastorRepository, MessageSource messageSource ) {
         this.pastorRepository = pastorRepository;
         this.messageSource = messageSource;
     }
@@ -29,44 +29,40 @@ public class PastorUseCase{
         return pastorRepository.findAllDTO();
     }
 
-    public List<Pastor> findAllList() {
-        return pastorRepository.findAllList();
-    }
-
     public List<Pastor> findAll() {
         return pastorRepository.findAll();
     }
 
-    public Pastor findById(String id) {
-        Optional<Pastor> obj = pastorRepository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found"));
+    public Pastor findById( String id ) {
+        Optional<Pastor> obj = pastorRepository.findById( id );
+        return obj.orElseThrow( () -> new ObjectNotFoundException( "Object not found" ) );
     }
 
-    public Pastor insert(Pastor pastor) {
-        return pastorRepository.insert(pastor);
+    public Pastor insert( Pastor pastor ) {
+        return pastorRepository.insert( pastor );
     }
 
-    public Pastor update(Pastor pastor) {
-        Optional<Pastor> obj = pastorRepository.findById(pastor.getId());
+    public Pastor update( Pastor pastor ) {
+        Optional<Pastor> obj = pastorRepository.findById( pastor.getId() );
 
-        if (obj.isEmpty()) {
-            String message = messageSource.getMessage("object.not.exists", new Object[]{pastor.getId()}, LocaleContextHolder.getLocale());
-            throw new ObjectNotExistsException(message);
+        if ( obj.isEmpty() ) {
+            String message = messageSource.getMessage( "object.not.exists", new Object[]{pastor.getId()}, LocaleContextHolder.getLocale() );
+            throw new ObjectNotExistsException( message );
         }
 
-        return pastorRepository.save(pastor);
+        return pastorRepository.save( pastor );
     }
 
-    public void deleteById(String id) {
-        pastorRepository.deleteById(id);
+    public void deleteById( String id ) {
+        pastorRepository.deleteById( id );
     }
 
-    private PastorDTO convertToPastorDTO(Pastor pastor) {
+    private PastorDTO convertToPastorDTO( Pastor pastor ) {
 
-        if(pastor == null){
+        if ( pastor == null ) {
             return new PastorDTO();
         }
 
-        return new PastorDTO(pastor);
+        return new PastorDTO( pastor );
     }
 }
