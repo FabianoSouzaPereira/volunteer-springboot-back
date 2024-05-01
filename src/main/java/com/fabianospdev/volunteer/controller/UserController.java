@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value="/users")
@@ -22,6 +19,7 @@ public class UserController {
     @Autowired
     private UserService service;
 
+    @Autowired(required=true)
     private UserUseCase user;
 
     @RequestMapping(method=RequestMethod.GET)
@@ -32,7 +30,7 @@ public class UserController {
 
     @RequestMapping(value="/find-all-list", method=RequestMethod.GET)
     public ResponseEntity<List<User>> findAllList() {
-        List<User> list = service.findAll();
+        List<User> list = service.findAllList();
         return ResponseEntity.ok().body(list);
     }
 

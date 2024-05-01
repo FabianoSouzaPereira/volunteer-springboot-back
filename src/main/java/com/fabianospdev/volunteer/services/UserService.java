@@ -7,9 +7,11 @@ import com.fabianospdev.volunteer.usecases.user.UserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.repository.Query;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -17,7 +19,7 @@ public class UserService {
     @Autowired(required=true)
     private UserRepository repository;
 
-    @Autowired
+    @Autowired(required=true)
     private UserUseCase useCase;
 
 
@@ -25,8 +27,20 @@ public class UserService {
         return useCase.findAll();
     }
 
-    public List<UserDTO> findAllDTO(User user) {
-        return useCase.findAllDTO(user);
+    public List<User> findAllList() {
+        return useCase.findAllList();
+    }
+
+    public List<UserDTO> findAllDTO(User exampleUser) {
+        Example<User> example = Example.of(exampleUser);
+        return useCase.findAll().stream()
+                .map( ( examples ) -> convertToUserDTO( examples ) )
+                .collect( Collectors.toList());
+    }
+
+    private UserDTO convertToUserDTO( User user ) {
+        UserDTO userDTO = new UserDTO(user);
+        return userDTO;
     }
 
 

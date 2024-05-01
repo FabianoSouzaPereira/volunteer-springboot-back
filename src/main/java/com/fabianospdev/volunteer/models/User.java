@@ -1,5 +1,7 @@
 package com.fabianospdev.volunteer.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -26,6 +28,7 @@ public class User implements Serializable {
     private String email;
     private String address;
     private String job;
+
 
     public User() { }
 
@@ -138,6 +141,7 @@ public class User implements Serializable {
         this.job = job;
     }
 
+    @JsonBackReference
     public User getDefaultExemple() {
         User exampleUser = new User("1", "name", 30, "group", "role",
                 new ArrayList<>( Arrays.asList("Coding", "Testing", "Debugging")),

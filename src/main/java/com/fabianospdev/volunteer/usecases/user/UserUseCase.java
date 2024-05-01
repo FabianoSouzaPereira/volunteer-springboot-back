@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Example;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +32,10 @@ public class UserUseCase{
         return userRepository.findAll(example).stream()
                 .map(this::convertToUserDTO)
                 .collect( Collectors.toList());
+    }
+
+    public List<User> findAllList() {
+        return userRepository.findAllList();
     }
 
     public List<User> findAll() {
