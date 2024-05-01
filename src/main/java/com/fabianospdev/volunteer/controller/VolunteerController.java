@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.controller;
 
-import com.fabianospdev.volunteer.models.Volunteer;
 import com.fabianospdev.volunteer.dto.VolunteerDTO;
+import com.fabianospdev.volunteer.models.Volunteer;
 import com.fabianospdev.volunteer.services.VolunteerService;
 import com.fabianospdev.volunteer.usecases.volunteer.VolunteerUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +11,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value="/volunteers")
-public class VolunteerController {
+public class VolunteerController{
 
     @Autowired
     private VolunteerService service;
@@ -36,6 +37,11 @@ public class VolunteerController {
 
     @RequestMapping(value="/{id}", method=RequestMethod.GET)
     public ResponseEntity<VolunteerDTO> findById(@PathVariable String id) {
+
+        if(id == null || id.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         Volunteer obj = service.findById(id);
         return ResponseEntity.ok().body(new VolunteerDTO(obj));
     }
@@ -48,6 +54,11 @@ public class VolunteerController {
 
     @RequestMapping(method=RequestMethod.POST)
     public ResponseEntity<Void> insert(@RequestBody Volunteer obj) {
+
+        if(obj == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -56,20 +67,47 @@ public class VolunteerController {
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable String id) {
+
+        if(id == null || id.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(value="/{id}/dto", method=RequestMethod.PUT)
     public ResponseEntity<Void> update(@RequestBody VolunteerDTO objDto, @PathVariable String id) {
-        Volunteer obj = service.fromDTO(objDto);
-        obj.setId(id);
-        obj = service.update(obj);
-        return ResponseEntity.noContent().build();
+
+        if(objDto == null || objDto.getId() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<Volunteer> optionalVolunteer = Optional.ofNullable(service.findById(id));
+
+        if(optionalVolunteer.isPresent()) {
+            Volunteer oldObj = optionalVolunteer.get();
+
+            oldObj.setName(objDto.getName());
+            oldObj.setPhone(objDto.getPhone());
+            oldObj.setEmail(objDto.getEmail());
+
+            service.update(oldObj);
+
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 
     @RequestMapping(value="/{id}", method=RequestMethod.PUT)
     public ResponseEntity<Void> updatefull(@RequestBody Volunteer obj, @PathVariable String id) {
+
+        if(obj == null || id == null || id.isEmpty() || !id.equals(obj.getId())) {
+            return ResponseEntity.badRequest().build();
+        }
+
         obj.setId(id);
         obj = service.update(obj);
         return ResponseEntity.noContent().build();

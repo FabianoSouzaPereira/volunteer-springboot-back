@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-class UserServiceTest {
+class UserServiceTest{
 
     @Mock
     private UserRepository userRepository;
@@ -36,25 +36,29 @@ class UserServiceTest {
 
     @Test
     void testFindAll() {
-//        List<UserDTO> userList = new ArrayList<>();
-//        userList.add(new UserDTO(new User("1", "John", "john@example.com", "+123456789")));
-//        userList.add(new UserDTO(new User("2", "Maria", "maria@example.com", "+987654321")));
-//
-//        User exampleUser = new User("1", "John", 30, "Pastors", "Pastor",new ArrayList<>( Arrays.asList("Coding", "Testing", "Debugging")),
-//                "Active", "+55123456789", "joao.silva@example.com","123 Main Street, City, Country", "Full-stack Developer");
-//
-//        when(userUseCase.findAllDTO(exampleUser)).thenReturn(userList);
-//        List<UserDTO> result = userService.findAllDTO(exampleUser).getBody();
-//        assertEquals(2, result.size());
+        List<UserDTO> userList = new ArrayList<>();
+        userList.add(new UserDTO(new User("1", "John", "john@example.com", "+123456789")));
+        userList.add(new UserDTO(new User("2", "Maria", "maria@example.com", "+987654321")));
+
+        User exampleUser = new User("1", "John", 30, "Pastors", "Pastor", new ArrayList<>(Arrays.asList("Coding", "Testing", "Debugging")),
+                "Active", "+55123456789", "joao.silva@example.com", "123 Main Street, City, Country", "Full-stack Developer");
+
+        when(userUseCase.findAllDTO()).thenReturn(userList);
+        List<UserDTO> result = userService.findAllDTO();
+        assertEquals(2, result.size());
 
 
         List<User> userListFull = new ArrayList<>();
-        userListFull.add(new User("1", "John", 30, "Pastors","Pastor",new ArrayList<>( Arrays.asList("Coding", "Testing", "Debugging")),"Active","+55123456789", "joao.silva@example.com","123 Main Street, City, Country","Full-stack Developer"));
-        userListFull.add(new User("2", "Maria", 25, "Teachers", "Teacher", new ArrayList<>(Arrays.asList("Teaching", "Planning", "Grading")), "Active", "+55123456788", "maria.rodrigues@example.com", "456 Elm Street, City, Country", "Math Teacher"));
+        userListFull.add(
+                new User("1", "John", 30, "Pastors", "Pastor", new ArrayList<>(Arrays.asList("Coding", "Testing", "Debugging")),
+                        "Active", "+55123456789", "joao.silva@example.com", "123 Main Street, City, Country", "Full-stack Developer"));
+        userListFull.add(
+                new User("2", "Maria", 25, "Teachers", "Teacher", new ArrayList<>(Arrays.asList("Teaching", "Planning", "Grading")),
+                        "Active", "+55123456788", "maria.rodrigues@example.com", "456 Elm Street, City, Country", "Math Teacher"));
 
         when(userUseCase.findAll()).thenReturn(userListFull);
         List<User> res = userService.findAll();
-       // assertEquals(2, result.size());
+        assertEquals(2, res.size());
     }
 
     @Test

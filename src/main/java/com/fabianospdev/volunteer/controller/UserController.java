@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.controller;
 
-import com.fabianospdev.volunteer.models.User;
 import com.fabianospdev.volunteer.dto.UserDTO;
+import com.fabianospdev.volunteer.models.User;
 import com.fabianospdev.volunteer.services.UserService;
 import com.fabianospdev.volunteer.usecases.user.UserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value="/users")
-public class UserController {
+public class UserController{
 
     @Autowired
     private UserService service;
@@ -36,6 +39,11 @@ public class UserController {
 
     @RequestMapping(value="/{id}", method=RequestMethod.GET)
     public ResponseEntity<UserDTO> findById(@PathVariable String id) {
+
+        if(id == null || id.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         User obj = service.findById(id);
         return ResponseEntity.ok().body(new UserDTO(obj));
     }
@@ -48,6 +56,11 @@ public class UserController {
 
     @RequestMapping(method=RequestMethod.POST)
     public ResponseEntity<Void> insert(@RequestBody User obj) {
+
+        if(obj == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -56,22 +69,68 @@ public class UserController {
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable String id) {
+
+        if(id == null || id.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(value="/{id}/dto", method=RequestMethod.PUT)
     public ResponseEntity<Void> update(@RequestBody UserDTO objDto, @PathVariable String id) {
-        User obj = service.fromDTO(objDto);
-        obj.setId(id);
-        obj = service.update(obj);
-        return ResponseEntity.noContent().build();
+
+        if(objDto == null || objDto.getId() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<User> optionalUser = Optional.ofNullable(service.findById(id));
+
+        if(optionalUser.isPresent()) {
+            User oldObj = optionalUser.get();
+
+            oldObj.setName(objDto.getName());
+            oldObj.setPhone(objDto.getPhone());
+            oldObj.setEmail(objDto.getEmail());
+
+            service.update(oldObj);
+
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 
     @RequestMapping(value="/{id}", method=RequestMethod.PUT)
     public ResponseEntity<Void> updatefull(@RequestBody User obj, @PathVariable String id) {
-        obj.setId(id);
-        obj = service.update(obj);
-        return ResponseEntity.noContent().build();
+
+        if(obj == null || id == null || id.isEmpty() || !id.equals(obj.getId())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<User> optionalUser = Optional.ofNullable(service.findById(id));
+
+        if(optionalUser.isPresent()) {
+            User oldObj = optionalUser.get();
+
+            oldObj.setName(Objects.requireNonNullElse(obj.getName(), ""));
+            oldObj.setAge(Objects.requireNonNullElse(obj.getAge(), 0));
+            oldObj.setGroup(Objects.requireNonNullElse(obj.getGroup(), ""));
+            oldObj.setRole(Objects.requireNonNullElse(obj.getRole(), ""));
+            oldObj.setFunctions(Objects.requireNonNullElse(obj.getFunctions(), Collections.emptyList()));
+            oldObj.setStatus(Objects.requireNonNullElse(obj.getStatus(), ""));
+            oldObj.setPhone(Objects.requireNonNullElse(obj.getPhone(), ""));
+            oldObj.setEmail(Objects.requireNonNullElse(obj.getEmail(), ""));
+            oldObj.setAddress(Objects.requireNonNullElse(obj.getAddress(), ""));
+            oldObj.setJob(Objects.requireNonNullElse(obj.getJob(), ""));
+
+            service.update(oldObj);
+
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

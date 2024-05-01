@@ -4,17 +4,18 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Document(collection="user")
-public class User implements Serializable {
+public class User implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
     private String id;
-    private String name;
-    private int age;
+    private String name = "";
+    private int age = -1;
     private String group;
     private String role;
     private List<String> functions;
@@ -26,34 +27,34 @@ public class User implements Serializable {
     private String job;
 
 
-    public User() { }
+    public User() {}
 
-    public User( String id, String name, String email, String phone ) {
+    public User(String id, String name, String email, String phone) {
         this.id = id;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
+        this.name = name != null ? name : "";
+        this.email = email != null ? email : "";
+        this.phone = phone != null ? phone : "";
     }
 
-    public User( String id, String name, int age, String group, String role, List<String> functions, String status, String phone, String email, String address, String job ) {
+    public User(String id, String name, int age, String group, String role, List<String> functions, String status, String phone, String email, String address, String job) {
         this.id = id;
-        this.name = name;
-        this.age = age;
-        this.group = group;
-        this.role = role;
-        this.functions = functions;
-        this.status = status;
-        this.phone = phone;
-        this.email = email;
-        this.address = address;
-        this.job = job;
+        this.name = name != null ? name : "";
+        this.age = age > 0 ? age : 0;
+        this.group = group != null ? group : "";
+        this.role = role != null ? role : "";
+        this.functions = functions != null ? functions : new ArrayList<>();
+        this.status = status != null ? status : "";
+        this.phone = phone != null ? phone : "";
+        this.email = email != null ? email : "";
+        this.address = address != null ? address : "";
+        this.job = job != null ? job : "";
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId( String id ) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -61,7 +62,7 @@ public class User implements Serializable {
         return name;
     }
 
-    public void setName( String name ) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -69,7 +70,7 @@ public class User implements Serializable {
         return age;
     }
 
-    public void setAge( int age ) {
+    public void setAge(int age) {
         this.age = age;
     }
 
@@ -77,7 +78,7 @@ public class User implements Serializable {
         return group;
     }
 
-    public void setGroup( String group ) {
+    public void setGroup(String group) {
         this.group = group;
     }
 
@@ -85,7 +86,7 @@ public class User implements Serializable {
         return role;
     }
 
-    public void setRole( String role ) {
+    public void setRole(String role) {
         this.role = role;
     }
 
@@ -93,7 +94,7 @@ public class User implements Serializable {
         return functions;
     }
 
-    public void setFunctions( List<String> functions ) {
+    public void setFunctions(List<String> functions) {
         this.functions = functions;
     }
 
@@ -101,7 +102,7 @@ public class User implements Serializable {
         return status;
     }
 
-    public void setStatus( String status ) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -109,7 +110,7 @@ public class User implements Serializable {
         return phone;
     }
 
-    public void setPhone( String phone ) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -117,7 +118,7 @@ public class User implements Serializable {
         return email;
     }
 
-    public void setEmail( String email ) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -125,7 +126,7 @@ public class User implements Serializable {
         return address;
     }
 
-    public void setAddress( String address ) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
@@ -133,20 +134,20 @@ public class User implements Serializable {
         return job;
     }
 
-    public void setJob( String job ) {
+    public void setJob(String job) {
         this.job = job;
     }
 
     @Override
-    public boolean equals( Object o ) {
-        if ( this == o ) return true;
-        if ( o == null || getClass() != o.getClass() ) return false;
-        User user = ( User ) o;
-        return Objects.equals( id, user.id );
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode( id );
+        return Objects.hashCode(id);
     }
 }
