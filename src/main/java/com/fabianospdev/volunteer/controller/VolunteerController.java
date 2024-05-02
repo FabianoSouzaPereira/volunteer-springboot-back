@@ -9,8 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.lang.reflect.Field;
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -22,6 +25,27 @@ public class VolunteerController{
 
     @Autowired(required=true)
     private VolunteerUseCase volunteer;
+
+    private static <T> ResponseEntity<Void> getVoidResponseEntity(T obj, String id, Class<T> clazz) {
+        if(obj == null || id == null || id.isEmpty() || !clazz.isInstance(obj)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Field[] fields = clazz.getDeclaredFields();
+
+        for(Field field: fields) {
+            try {
+                field.setAccessible(true);
+
+                if(field.get(obj) == null) {
+                    return ResponseEntity.badRequest().build();
+                }
+            } catch(IllegalAccessException e) {
+                return ResponseEntity.badRequest().build();
+            }
+        }
+        return null;
+    }
 
     @RequestMapping(value="/find-all-list", method=RequestMethod.GET)
     public ResponseEntity<List<VolunteerDTO>> findAllDTO() {
@@ -55,9 +79,8 @@ public class VolunteerController{
     @RequestMapping(method=RequestMethod.POST)
     public ResponseEntity<Void> insert(@RequestBody Volunteer obj) {
 
-        if(obj == null) {
-            return ResponseEntity.badRequest().build();
-        }
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, "0", Volunteer.class);
+        if(build != null) return build;
 
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -79,9 +102,8 @@ public class VolunteerController{
     @RequestMapping(value="/{id}/dto", method=RequestMethod.PUT)
     public ResponseEntity<Void> update(@RequestBody VolunteerDTO objDto, @PathVariable String id) {
 
-        if(objDto == null || objDto.getId() == null) {
-            return ResponseEntity.badRequest().build();
-        }
+        ResponseEntity<Void> build = getVoidResponseEntity(objDto, id, VolunteerDTO.class);
+        if(build != null) return build;
 
         Optional<Volunteer> optionalVolunteer = Optional.ofNullable(service.findById(id));
 
@@ -104,12 +126,30 @@ public class VolunteerController{
     @RequestMapping(value="/{id}", method=RequestMethod.PUT)
     public ResponseEntity<Void> updatefull(@RequestBody Volunteer obj, @PathVariable String id) {
 
-        if(obj == null || id == null || id.isEmpty() || !id.equals(obj.getId())) {
-            return ResponseEntity.badRequest().build();
-        }
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, Volunteer.class);
+        if(build != null) return build;
 
-        obj.setId(id);
-        obj = service.update(obj);
-        return ResponseEntity.noContent().build();
+        Optional<Volunteer> optionalUser = Optional.ofNullable(service.findById(id));
+
+        if(optionalUser.isPresent()) {
+            Volunteer oldObj = optionalUser.get();
+
+            oldObj.setName(Objects.requireNonNullElse(obj.getName(), ""));
+            oldObj.setAge(Objects.requireNonNullElse(obj.getAge(), 0));
+            oldObj.setGroup(Objects.requireNonNullElse(obj.getGroup(), ""));
+            oldObj.setRole(Objects.requireNonNullElse(obj.getRole(), ""));
+            oldObj.setFunctions(Objects.requireNonNullElse(obj.getFunctions(), Collections.emptyList()));
+            oldObj.setStatus(Objects.requireNonNullElse(obj.getStatus(), ""));
+            oldObj.setPhone(Objects.requireNonNullElse(obj.getPhone(), ""));
+            oldObj.setEmail(Objects.requireNonNullElse(obj.getEmail(), ""));
+            oldObj.setAddress(Objects.requireNonNullElse(obj.getAddress(), ""));
+            oldObj.setJob(Objects.requireNonNullElse(obj.getJob(), ""));
+
+            service.update(oldObj);
+
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
