@@ -8,13 +8,21 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class ResourceExceptionHandler {
+public class ResourceExceptionHandler{
 
     @ExceptionHandler(ObjectNotFoundException.class)
-    public ResponseEntity<StandardError> objectNotFound( ObjectNotFoundException e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e, HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.NOT_FOUND;
         StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Not found", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(DatabaseInsertException.class)
+    public ResponseEntity<StandardError> databaseInsertError(DatabaseInsertException e, HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Database Insert Error", e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 
@@ -48,14 +56,14 @@ public class ResourceExceptionHandler {
     }
 
     @ExceptionHandler(ObjectAlreadyExistsException.class)
-    public ResponseEntity<StandardError> ObjectAlreadyExists( ObjectAlreadyExistsException e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> ObjectAlreadyExists(ObjectAlreadyExistsException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.CONFLICT; // 409 Conflict
         StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Object Already Exists", e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
 
     @ExceptionHandler(ObjectNotExistsException.class)
-    public ResponseEntity<StandardError> ObjectNotExists( ObjectNotExistsException e, HttpServletRequest request) {
+    public ResponseEntity<StandardError> ObjectNotExists(ObjectNotExistsException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.CONFLICT; // 409 Conflict
         StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Object Not Exists", e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);

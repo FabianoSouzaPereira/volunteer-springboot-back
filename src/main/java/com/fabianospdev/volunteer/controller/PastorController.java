@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value="/pastors")
+@RequestMapping(value="/volunteers/pastors")
 public class PastorController{
 
     @Autowired
@@ -27,7 +27,7 @@ public class PastorController{
     private PastorUseCase pastor;
 
     private static <T> ResponseEntity<Void> getVoidResponseEntity(T obj, String id, Class<T> clazz) {
-        if(obj == null || id == null || id.isEmpty() || !clazz.isInstance(obj)) {
+        if(obj == null || id != null || !clazz.isInstance(obj)) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -79,7 +79,7 @@ public class PastorController{
     @RequestMapping(method=RequestMethod.POST)
     public ResponseEntity<Void> insert(@RequestBody Pastor obj) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, "0", Pastor.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, Pastor.class);
         if(build != null) return build;
 
         obj = service.insert(obj);

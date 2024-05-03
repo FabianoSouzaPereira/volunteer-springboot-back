@@ -1,5 +1,20 @@
 spring:
   application:
     name: Volunteer
+  server:
+    port: 8080
+    servlet:
+      context-path: /volunteer
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: user-registration-events-consumer
+      properties:
+        zookeeper.connect: localhost:2181
+
   profile:
     active: prod
+
+  jpa:
+    open-in-view: false

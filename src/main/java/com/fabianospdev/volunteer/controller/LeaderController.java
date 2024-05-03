@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value="/leaders")
+@RequestMapping(value="/volunteers/leaders")
 public class LeaderController{
 
     @Autowired
@@ -27,7 +27,7 @@ public class LeaderController{
     private LeaderUseCase leader;
 
     private static <T> ResponseEntity<Void> getVoidResponseEntity(T obj, String id, Class<T> clazz) {
-        if(obj == null || id == null || id.isEmpty() || !clazz.isInstance(obj)) {
+        if(obj == null || id != null || !clazz.isInstance(obj)) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -79,7 +79,7 @@ public class LeaderController{
     @RequestMapping(method=RequestMethod.POST)
     public ResponseEntity<Void> insert(@RequestBody Leader obj) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, "0", Leader.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, Leader.class);
         if(build != null) return build;
 
         obj = service.insert(obj);

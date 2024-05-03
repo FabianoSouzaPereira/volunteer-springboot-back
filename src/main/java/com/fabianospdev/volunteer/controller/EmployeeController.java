@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value="/employees")
+@RequestMapping(value="/volunteers/employees")
 public class EmployeeController{
 
     @Autowired
@@ -27,7 +27,7 @@ public class EmployeeController{
     private EmployeeUseCase employee;
 
     private static <T> ResponseEntity<Void> getVoidResponseEntity(T obj, String id, Class<T> clazz) {
-        if(obj == null || id == null || id.isEmpty() || !clazz.isInstance(obj)) {
+        if(obj == null || id != null || !clazz.isInstance(obj)) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -79,7 +79,7 @@ public class EmployeeController{
     @RequestMapping(method=RequestMethod.POST)
     public ResponseEntity<Void> insert(@RequestBody Employee obj) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, "0", Employee.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, Employee.class);
         if(build != null) return build;
 
         obj = service.insert(obj);
