@@ -1,0 +1,11 @@
+version: '3'
+services:
+  volunteer-app:
+    image: volunteer-springboot-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./target:/app
