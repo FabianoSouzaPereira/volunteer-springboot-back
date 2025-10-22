@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.controller;
 
 import com.fabianospdev.volunteer.dto.LeaderDTO;
-import com.fabianospdev.volunteer.models.Leader;
+import com.fabianospdev.volunteer.models.LeaderModel;
 import com.fabianospdev.volunteer.services.LeaderService;
 import com.fabianospdev.volunteer.usecases.leader.LeaderUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +54,8 @@ public class LeaderController{
     }
 
     @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<List<Leader>> findAll() {
-        List<Leader> list = service.findAll();
+    public ResponseEntity<List<LeaderModel>> findAll() {
+        List<LeaderModel> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
@@ -66,20 +66,20 @@ public class LeaderController{
             return ResponseEntity.badRequest().build();
         }
 
-        Leader obj = service.findById(id);
+        LeaderModel obj = service.findById(id);
         return ResponseEntity.ok().body(new LeaderDTO(obj));
     }
 
     @RequestMapping(value="/{id}/find-by-id", method=RequestMethod.GET)
-    public ResponseEntity<Leader> findByIdList(@PathVariable String id) {
-        Leader obj = service.findById(id);
+    public ResponseEntity<LeaderModel> findByIdList(@PathVariable String id) {
+        LeaderModel obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
     @RequestMapping(method=RequestMethod.POST)
-    public ResponseEntity<Void> insert(@RequestBody Leader obj) {
+    public ResponseEntity<Void> insert(@RequestBody LeaderModel obj) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, Leader.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, LeaderModel.class);
         if(build != null) return build;
 
         obj = service.insert(obj);
@@ -105,10 +105,10 @@ public class LeaderController{
         ResponseEntity<Void> build = getVoidResponseEntity(objDto, id, LeaderDTO.class);
         if(build != null) return build;
 
-        Optional<Leader> optionalLeader = Optional.ofNullable(service.findById(id));
+        Optional<LeaderModel> optionalLeader = Optional.ofNullable(service.findById(id));
 
         if(optionalLeader.isPresent()) {
-            Leader oldObj = optionalLeader.get();
+            LeaderModel oldObj = optionalLeader.get();
 
             oldObj.setName(objDto.getName());
             oldObj.setPhone(objDto.getPhone());
@@ -124,15 +124,15 @@ public class LeaderController{
 
 
     @RequestMapping(value="/{id}", method=RequestMethod.PUT)
-    public ResponseEntity<Void> updatefull(@RequestBody Leader obj, @PathVariable String id) {
+    public ResponseEntity<Void> updatefull(@RequestBody LeaderModel obj, @PathVariable String id) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, Leader.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, LeaderModel.class);
         if(build != null) return build;
 
-        Optional<Leader> optionalUser = Optional.ofNullable(service.findById(id));
+        Optional<LeaderModel> optionalUser = Optional.ofNullable(service.findById(id));
 
         if(optionalUser.isPresent()) {
-            Leader oldObj = optionalUser.get();
+            LeaderModel oldObj = optionalUser.get();
 
             oldObj.setName(Objects.requireNonNullElse(obj.getName(), ""));
             oldObj.setAge(Objects.requireNonNullElse(obj.getAge(), 0));

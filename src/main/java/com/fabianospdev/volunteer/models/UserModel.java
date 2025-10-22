@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Document(collection="user")
-public class User implements Serializable{
+public class UserModel implements Serializable{
     private static final long serialVersionUID = 1L;
     private String password;
     private LocalDateTime createdAt;
@@ -30,16 +30,16 @@ public class User implements Serializable{
     private String job;
 
 
-    public User() {}
+    public UserModel() {}
 
-    public User(String id, String name, String email, String phone) {
+    public UserModel(String id, String name, String email, String phone) {
         this.id = id;
         this.name = name != null ? name : "";
         this.email = email != null ? email : "";
         this.phone = phone != null ? phone : "";
     }
 
-    public User(String id, String name, int age, String group, String role, List<String> functions, String status, String phone, String email, String address, String job) {
+    public UserModel(String id, String name, int age, String group, String role, List<String> functions, String status, String phone, String email, String address, String job) {
         this.id = id;
         this.name = name != null ? name : "";
         this.age = age > 0 ? age : 0;
@@ -153,7 +153,7 @@ public class User implements Serializable{
     public boolean equals(Object o) {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        UserModel user = (UserModel) o;
         return Objects.equals(id, user.id);
     }
 

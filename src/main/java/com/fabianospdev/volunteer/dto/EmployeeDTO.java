@@ -1,6 +1,6 @@
 package com.fabianospdev.volunteer.dto;
 
-import com.fabianospdev.volunteer.models.Employee;
+import com.fabianospdev.volunteer.models.EmployeeModel;
 
 import java.io.Serializable;
 
@@ -15,7 +15,7 @@ public class EmployeeDTO implements Serializable{
 
     public EmployeeDTO() { }
 
-    public EmployeeDTO( Employee obj ) {
+    public EmployeeDTO( EmployeeModel obj ) {
         id = obj.getId();
         name = obj.getName();
         email = obj.getEmail();

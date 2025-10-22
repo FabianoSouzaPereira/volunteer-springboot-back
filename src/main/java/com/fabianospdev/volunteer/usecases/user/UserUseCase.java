@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.usecases.user;
 
 import com.fabianospdev.volunteer.dto.UserDTO;
-import com.fabianospdev.volunteer.models.User;
+import com.fabianospdev.volunteer.models.UserModel;
 import com.fabianospdev.volunteer.repositories.UserRepository;
 import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
@@ -31,17 +31,17 @@ public class UserUseCase{
         return userRepository.findAllDTO();
     }
 
-    public List<User> findAll() {
+    public List<UserModel> findAll() {
         return userRepository.findAll();
     }
 
-    public User findById(String id) {
-        Optional<User> obj = userRepository.findById(id);
+    public UserModel findById(String id) {
+        Optional<UserModel> obj = userRepository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found"));
     }
 
-    public User insert(User user) {
-        Optional<User> success = Optional.ofNullable(userRepository.insert(user));
+    public UserModel insert(UserModel user) {
+        Optional<UserModel> success = Optional.ofNullable(userRepository.insert(user));
 
         if(success.isPresent()) {
             String message = messageSource.getMessage("object.insert.success", new Object[]{user.getId()}, LocaleContextHolder.getLocale());
@@ -51,8 +51,8 @@ public class UserUseCase{
         return success.orElseThrow(() -> new ObjectNotFoundException("Object not found"));
     }
 
-    public User update(User user) {
-        Optional<User> obj = userRepository.findById(user.getId());
+    public UserModel update(UserModel user) {
+        Optional<UserModel> obj = userRepository.findById(user.getId());
 
         if(obj.isEmpty()) {
             String message = messageSource.getMessage("object.not.exists", new Object[]{user.getId()}, LocaleContextHolder.getLocale());
@@ -66,7 +66,7 @@ public class UserUseCase{
         userRepository.deleteById(id);
     }
 
-    private UserDTO convertToUserDTO(User user) {
+    private UserDTO convertToUserDTO(UserModel user) {
 
         if(user == null) {
             return new UserDTO();

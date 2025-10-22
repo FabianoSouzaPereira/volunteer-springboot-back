@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.controller;
 
 import com.fabianospdev.volunteer.dto.VolunteerDTO;
-import com.fabianospdev.volunteer.models.Volunteer;
+import com.fabianospdev.volunteer.models.VolunteerModel;
 import com.fabianospdev.volunteer.services.VolunteerService;
 import com.fabianospdev.volunteer.usecases.volunteer.VolunteerUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +54,8 @@ public class VolunteerController{
     }
 
     @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<List<Volunteer>> findAll() {
-        List<Volunteer> list = service.findAll();
+    public ResponseEntity<List<VolunteerModel>> findAll() {
+        List<VolunteerModel> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
@@ -66,20 +66,20 @@ public class VolunteerController{
             return ResponseEntity.badRequest().build();
         }
 
-        Volunteer obj = service.findById(id);
+        VolunteerModel obj = service.findById(id);
         return ResponseEntity.ok().body(new VolunteerDTO(obj));
     }
 
     @RequestMapping(value="/{id}/find-by-id", method=RequestMethod.GET)
-    public ResponseEntity<Volunteer> findByIdList(@PathVariable String id) {
-        Volunteer obj = service.findById(id);
+    public ResponseEntity<VolunteerModel> findByIdList(@PathVariable String id) {
+        VolunteerModel obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
     @RequestMapping(method=RequestMethod.POST)
-    public ResponseEntity<Void> insert(@RequestBody Volunteer obj) {
+    public ResponseEntity<Void> insert(@RequestBody VolunteerModel obj) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, Volunteer.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, VolunteerModel.class);
         if(build != null) return build;
 
         obj = service.insert(obj);
@@ -105,10 +105,10 @@ public class VolunteerController{
         ResponseEntity<Void> build = getVoidResponseEntity(objDto, id, VolunteerDTO.class);
         if(build != null) return build;
 
-        Optional<Volunteer> optionalVolunteer = Optional.ofNullable(service.findById(id));
+        Optional<VolunteerModel> optionalVolunteer = Optional.ofNullable(service.findById(id));
 
         if(optionalVolunteer.isPresent()) {
-            Volunteer oldObj = optionalVolunteer.get();
+            VolunteerModel oldObj = optionalVolunteer.get();
 
             oldObj.setName(objDto.getName());
             oldObj.setPhone(objDto.getPhone());
@@ -124,15 +124,15 @@ public class VolunteerController{
 
 
     @RequestMapping(value="/{id}", method=RequestMethod.PUT)
-    public ResponseEntity<Void> updatefull(@RequestBody Volunteer obj, @PathVariable String id) {
+    public ResponseEntity<Void> updatefull(@RequestBody VolunteerModel obj, @PathVariable String id) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, Volunteer.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, VolunteerModel.class);
         if(build != null) return build;
 
-        Optional<Volunteer> optionalUser = Optional.ofNullable(service.findById(id));
+        Optional<VolunteerModel> optionalUser = Optional.ofNullable(service.findById(id));
 
         if(optionalUser.isPresent()) {
-            Volunteer oldObj = optionalUser.get();
+            VolunteerModel oldObj = optionalUser.get();
 
             oldObj.setName(Objects.requireNonNullElse(obj.getName(), ""));
             oldObj.setAge(Objects.requireNonNullElse(obj.getAge(), 0));

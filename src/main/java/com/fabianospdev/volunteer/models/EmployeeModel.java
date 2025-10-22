@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Document(collection="pastor")
-public class Pastor implements Serializable{
+@Document(collection="employee")
+public class EmployeeModel implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -26,16 +26,16 @@ public class Pastor implements Serializable{
     private String address;
     private String job;
 
-    public Pastor() {}
+    public EmployeeModel() {}
 
-    public Pastor(String id, String name, String email, String phone) {
+    public EmployeeModel(String id, String name, String email, String phone) {
         this.id = id;
         this.name = name != null ? name : "";
         this.email = email != null ? email : "";
         this.phone = phone != null ? phone : "";
     }
 
-    public Pastor(String id, String name, int age, String group, String role, List<String> functions, String status, String phone, String email, String address, String job) {
+    public EmployeeModel(String id, String name, int age, String group, String role, List<String> functions, String status, String phone, String email, String address, String job) {
         this.id = id;
         this.name = name != null ? name : "";
         this.age = age > 0 ? age : 0;
@@ -137,12 +137,13 @@ public class Pastor implements Serializable{
         this.job = job;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
-        Pastor pastor = (Pastor) o;
-        return Objects.equals(id, pastor.id);
+        EmployeeModel employee = (EmployeeModel) o;
+        return Objects.equals(id, employee.id);
     }
 
     @Override

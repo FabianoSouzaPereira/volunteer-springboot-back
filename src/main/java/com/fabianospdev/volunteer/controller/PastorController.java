@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.controller;
 
 import com.fabianospdev.volunteer.dto.PastorDTO;
-import com.fabianospdev.volunteer.models.Pastor;
+import com.fabianospdev.volunteer.models.PastorModel;
 import com.fabianospdev.volunteer.services.PastorService;
 import com.fabianospdev.volunteer.usecases.pastor.PastorUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +54,8 @@ public class PastorController{
     }
 
     @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<List<Pastor>> findAll() {
-        List<Pastor> list = service.findAll();
+    public ResponseEntity<List<PastorModel>> findAll() {
+        List<PastorModel> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
@@ -66,20 +66,20 @@ public class PastorController{
             return ResponseEntity.badRequest().build();
         }
 
-        Pastor obj = service.findById(id);
+        PastorModel obj = service.findById(id);
         return ResponseEntity.ok().body(new PastorDTO(obj));
     }
 
     @RequestMapping(value="/{id}/find-by-id", method=RequestMethod.GET)
-    public ResponseEntity<Pastor> findByIdList(@PathVariable String id) {
-        Pastor obj = service.findById(id);
+    public ResponseEntity<PastorModel> findByIdList(@PathVariable String id) {
+        PastorModel obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
     @RequestMapping(method=RequestMethod.POST)
-    public ResponseEntity<Void> insert(@RequestBody Pastor obj) {
+    public ResponseEntity<Void> insert(@RequestBody PastorModel obj) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, Pastor.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, PastorModel.class);
         if(build != null) return build;
 
         obj = service.insert(obj);
@@ -105,10 +105,10 @@ public class PastorController{
         ResponseEntity<Void> build = getVoidResponseEntity(objDto, id, PastorDTO.class);
         if(build != null) return build;
 
-        Optional<Pastor> optionalPastor = Optional.ofNullable(service.findById(id));
+        Optional<PastorModel> optionalPastor = Optional.ofNullable(service.findById(id));
 
         if(optionalPastor.isPresent()) {
-            Pastor oldObj = optionalPastor.get();
+            PastorModel oldObj = optionalPastor.get();
 
             oldObj.setName(objDto.getName());
             oldObj.setPhone(objDto.getPhone());
@@ -124,15 +124,15 @@ public class PastorController{
 
 
     @RequestMapping(value="/{id}", method=RequestMethod.PUT)
-    public ResponseEntity<Void> updatefull(@RequestBody Pastor obj, @PathVariable String id) {
+    public ResponseEntity<Void> updatefull(@RequestBody PastorModel obj, @PathVariable String id) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, Pastor.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, PastorModel.class);
         if(build != null) return build;
 
-        Optional<Pastor> optionalUser = Optional.ofNullable(service.findById(id));
+        Optional<PastorModel> optionalUser = Optional.ofNullable(service.findById(id));
 
         if(optionalUser.isPresent()) {
-            Pastor oldObj = optionalUser.get();
+            PastorModel oldObj = optionalUser.get();
 
             oldObj.setName(Objects.requireNonNullElse(obj.getName(), ""));
             oldObj.setAge(Objects.requireNonNullElse(obj.getAge(), 0));

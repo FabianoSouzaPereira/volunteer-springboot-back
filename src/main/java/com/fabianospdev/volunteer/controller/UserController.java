@@ -1,11 +1,13 @@
 package com.fabianospdev.volunteer.controller;
 
+import com.fabianospdev.volunteer.dto.PasswordDTO;
 import com.fabianospdev.volunteer.dto.UserDTO;
-import com.fabianospdev.volunteer.models.User;
+import com.fabianospdev.volunteer.models.UserModel;
 import com.fabianospdev.volunteer.services.UserService;
 import com.fabianospdev.volunteer.usecases.user.UserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -25,6 +27,9 @@ public class UserController{
 
     @Autowired(required=true)
     private UserUseCase user;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private static <T> ResponseEntity<Void> getVoidResponseEntity(T obj, String id, Class<T> clazz) {
         if(obj == null || id != null || !clazz.isInstance(obj)) {
@@ -58,8 +63,8 @@ public class UserController{
     }
 
     @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<List<User>> findAll() {
-        List<User> list = service.findAll();
+    public ResponseEntity<List<UserModel>> findAll() {
+        List<UserModel> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
@@ -70,20 +75,20 @@ public class UserController{
             return ResponseEntity.badRequest().build();
         }
 
-        User obj = service.findById(id);
+        UserModel obj = service.findById(id);
         return ResponseEntity.ok().body(new UserDTO(obj));
     }
 
     @RequestMapping(value="/{id}/find-by-id", method=RequestMethod.GET)
-    public ResponseEntity<User> findByIdList(@PathVariable String id) {
-        User obj = service.findById(id);
+    public ResponseEntity<UserModel> findByIdList(@PathVariable String id) {
+        UserModel obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
     @RequestMapping(method=RequestMethod.POST)
-    public ResponseEntity<Void> insert(@RequestBody User obj) {
+    public ResponseEntity<Void> insert(@RequestBody UserModel obj) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, User.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, UserModel.class);
         if(build != null) return build;
 
         obj = service.insert(obj);
@@ -108,10 +113,10 @@ public class UserController{
         ResponseEntity<Void> build = getVoidResponseEntity(objDto, id, UserDTO.class);
         if(build != null) return build;
 
-        Optional<User> optionalUser = Optional.ofNullable(service.findById(id));
+        Optional<UserModel> optionalUser = Optional.ofNullable(service.findById(id));
 
         if(optionalUser.isPresent()) {
-            User oldObj = optionalUser.get();
+            UserModel oldObj = optionalUser.get();
 
             oldObj.setName(objDto.getName());
             oldObj.setPhone(objDto.getPhone());
@@ -126,15 +131,15 @@ public class UserController{
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.PUT)
-    public ResponseEntity<Void> updatefull(@RequestBody User obj, @PathVariable String id) {
+    public ResponseEntity<Void> updatefull(@RequestBody UserModel obj, @PathVariable String id) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, User.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, UserModel.class);
         if(build != null) return build;
 
-        Optional<User> optionalUser = Optional.ofNullable(service.findById(id));
+        Optional<UserModel> optionalUser = Optional.ofNullable(service.findById(id));
 
         if(optionalUser.isPresent()) {
-            User oldObj = optionalUser.get();
+            UserModel oldObj = optionalUser.get();
 
             oldObj.setName(Objects.requireNonNullElse(obj.getName(), ""));
             oldObj.setAge(Objects.requireNonNullElse(obj.getAge(), 0));
@@ -154,4 +159,16 @@ public class UserController{
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("/{id}/reset-password")
+    public ResponseEntity<Void> resetPassword(@PathVariable String id, @RequestBody PasswordDTO dto) {
+        UserModel user = service.findById(id);
+        if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
+            return ResponseEntity.status(403).build();
+        }
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        service.update(user);
+        return ResponseEntity.noContent().build();
+    }
+
 }

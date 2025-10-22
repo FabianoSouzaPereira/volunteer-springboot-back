@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.services;
 
 import com.fabianospdev.volunteer.dto.PartnerDTO;
-import com.fabianospdev.volunteer.models.Partner;
+import com.fabianospdev.volunteer.models.PartnerModel;
 import com.fabianospdev.volunteer.repositories.PartnerRepository;
 import com.fabianospdev.volunteer.usecases.partner.PartnerUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class PartnerService{
     private PartnerUseCase useCase;
 
 
-    public List<Partner> findAll() {
+    public List<PartnerModel> findAll() {
         return useCase.findAll();
     }
 
@@ -28,18 +28,18 @@ public class PartnerService{
         return useCase.findAllDTO();
     }
 
-    private PartnerDTO convertToPartnerDTO( Partner partner ) {
+    private PartnerDTO convertToPartnerDTO( PartnerModel partner ) {
         PartnerDTO partnerDTO = new PartnerDTO( partner );
         return partnerDTO;
     }
 
 
-    public Partner findById( String id ) {
-        Partner obj = useCase.findById( id );
+    public PartnerModel findById(String id ) {
+        PartnerModel obj = useCase.findById( id );
         return obj;
     }
 
-    public Partner insert( Partner obj ) {
+    public PartnerModel insert(PartnerModel obj ) {
         return useCase.insert( obj );
     }
 
@@ -47,16 +47,16 @@ public class PartnerService{
         useCase.deleteById( id );
     }
 
-    public Partner update( Partner obj ) {
+    public PartnerModel update(PartnerModel obj ) {
         return useCase.update( obj );
     }
 
-    private void updateData( Partner newObj, Partner obj ) {
+    private void updateData(PartnerModel newObj, PartnerModel obj ) {
         newObj.setName( obj.getName() );
         newObj.setEmail( obj.getEmail() );
     }
 
-    public Partner fromDTO( PartnerDTO objDto ) {
-        return new Partner( objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone() );
+    public PartnerModel fromDTO(PartnerDTO objDto ) {
+        return new PartnerModel( objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone() );
     }
 }

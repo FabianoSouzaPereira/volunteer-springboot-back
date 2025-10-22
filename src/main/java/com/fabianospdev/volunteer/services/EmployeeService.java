@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.services;
 
 import com.fabianospdev.volunteer.dto.EmployeeDTO;
-import com.fabianospdev.volunteer.models.Employee;
+import com.fabianospdev.volunteer.models.EmployeeModel;
 import com.fabianospdev.volunteer.repositories.EmployeeRepository;
 import com.fabianospdev.volunteer.usecases.employee.EmployeeUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class EmployeeService{
     private EmployeeUseCase useCase;
 
 
-    public List<Employee> findAll() {
+    public List<EmployeeModel> findAll() {
         return useCase.findAll();
     }
 
@@ -28,18 +28,18 @@ public class EmployeeService{
         return useCase.findAllDTO();
     }
 
-    private EmployeeDTO convertToEmployeeDTO( Employee employee ) {
+    private EmployeeDTO convertToEmployeeDTO( EmployeeModel employee ) {
         EmployeeDTO employeeDTO = new EmployeeDTO( employee );
         return employeeDTO;
     }
 
 
-    public Employee findById( String id ) {
-        Employee obj = useCase.findById( id );
+    public EmployeeModel findById(String id ) {
+        EmployeeModel obj = useCase.findById( id );
         return obj;
     }
 
-    public Employee insert( Employee obj ) {
+    public EmployeeModel insert(EmployeeModel obj ) {
         return useCase.insert( obj );
     }
 
@@ -47,16 +47,16 @@ public class EmployeeService{
         useCase.deleteById( id );
     }
 
-    public Employee update( Employee obj ) {
+    public EmployeeModel update(EmployeeModel obj ) {
         return useCase.update( obj );
     }
 
-    private void updateData( Employee newObj, Employee obj ) {
+    private void updateData(EmployeeModel newObj, EmployeeModel obj ) {
         newObj.setName( obj.getName() );
         newObj.setEmail( obj.getEmail() );
     }
 
-    public Employee fromDTO( EmployeeDTO objDto ) {
-        return new Employee( objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone() );
+    public EmployeeModel fromDTO(EmployeeDTO objDto ) {
+        return new EmployeeModel( objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone() );
     }
 }

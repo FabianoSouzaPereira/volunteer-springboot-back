@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.controller;
 
 import com.fabianospdev.volunteer.dto.EmployeeDTO;
-import com.fabianospdev.volunteer.models.Employee;
+import com.fabianospdev.volunteer.models.EmployeeModel;
 import com.fabianospdev.volunteer.services.EmployeeService;
 import com.fabianospdev.volunteer.usecases.employee.EmployeeUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +54,8 @@ public class EmployeeController{
     }
 
     @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<List<Employee>> findAll() {
-        List<Employee> list = service.findAll();
+    public ResponseEntity<List<EmployeeModel>> findAll() {
+        List<EmployeeModel> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
@@ -66,20 +66,20 @@ public class EmployeeController{
             return ResponseEntity.badRequest().build();
         }
 
-        Employee obj = service.findById(id);
+        EmployeeModel obj = service.findById(id);
         return ResponseEntity.ok().body(new EmployeeDTO(obj));
     }
 
     @RequestMapping(value="/{id}/find-by-id", method=RequestMethod.GET)
-    public ResponseEntity<Employee> findByIdList(@PathVariable String id) {
-        Employee obj = service.findById(id);
+    public ResponseEntity<EmployeeModel> findByIdList(@PathVariable String id) {
+        EmployeeModel obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
     @RequestMapping(method=RequestMethod.POST)
-    public ResponseEntity<Void> insert(@RequestBody Employee obj) {
+    public ResponseEntity<Void> insert(@RequestBody EmployeeModel obj) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, Employee.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, EmployeeModel.class);
         if(build != null) return build;
 
         obj = service.insert(obj);
@@ -105,10 +105,10 @@ public class EmployeeController{
         ResponseEntity<Void> build = getVoidResponseEntity(objDto, id, EmployeeDTO.class);
         if(build != null) return build;
 
-        Optional<Employee> optionalEmployee = Optional.ofNullable(service.findById(id));
+        Optional<EmployeeModel> optionalEmployee = Optional.ofNullable(service.findById(id));
 
         if(optionalEmployee.isPresent()) {
-            Employee oldObj = optionalEmployee.get();
+            EmployeeModel oldObj = optionalEmployee.get();
 
             oldObj.setName(objDto.getName());
             oldObj.setPhone(objDto.getPhone());
@@ -124,15 +124,15 @@ public class EmployeeController{
 
 
     @RequestMapping(value="/{id}", method=RequestMethod.PUT)
-    public ResponseEntity<Void> updatefull(@RequestBody Employee obj, @PathVariable String id) {
+    public ResponseEntity<Void> updatefull(@RequestBody EmployeeModel obj, @PathVariable String id) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, Employee.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, EmployeeModel.class);
         if(build != null) return build;
 
-        Optional<Employee> optionalUser = Optional.ofNullable(service.findById(id));
+        Optional<EmployeeModel> optionalUser = Optional.ofNullable(service.findById(id));
 
         if(optionalUser.isPresent()) {
-            Employee oldObj = optionalUser.get();
+            EmployeeModel oldObj = optionalUser.get();
 
             oldObj.setName(Objects.requireNonNullElse(obj.getName(), ""));
             oldObj.setAge(Objects.requireNonNullElse(obj.getAge(), 0));

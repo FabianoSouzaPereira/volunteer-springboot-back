@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.controller;
 
 import com.fabianospdev.volunteer.dto.PartnerDTO;
-import com.fabianospdev.volunteer.models.Partner;
+import com.fabianospdev.volunteer.models.PartnerModel;
 import com.fabianospdev.volunteer.services.PartnerService;
 import com.fabianospdev.volunteer.usecases.partner.PartnerUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +54,8 @@ public class PartnerController{
     }
 
     @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<List<Partner>> findAll() {
-        List<Partner> list = service.findAll();
+    public ResponseEntity<List<PartnerModel>> findAll() {
+        List<PartnerModel> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
@@ -66,20 +66,20 @@ public class PartnerController{
             return ResponseEntity.badRequest().build();
         }
 
-        Partner obj = service.findById(id);
+        PartnerModel obj = service.findById(id);
         return ResponseEntity.ok().body(new PartnerDTO(obj));
     }
 
     @RequestMapping(value="/{id}/find-by-id", method=RequestMethod.GET)
-    public ResponseEntity<Partner> findByIdList(@PathVariable String id) {
-        Partner obj = service.findById(id);
+    public ResponseEntity<PartnerModel> findByIdList(@PathVariable String id) {
+        PartnerModel obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
     @RequestMapping(method=RequestMethod.POST)
-    public ResponseEntity<Void> insert(@RequestBody Partner obj) {
+    public ResponseEntity<Void> insert(@RequestBody PartnerModel obj) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, Partner.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, PartnerModel.class);
         if(build != null) return build;
 
         obj = service.insert(obj);
@@ -105,10 +105,10 @@ public class PartnerController{
         ResponseEntity<Void> build = getVoidResponseEntity(objDto, id, PartnerDTO.class);
         if(build != null) return build;
 
-        Optional<Partner> optionalPartner = Optional.ofNullable(service.findById(id));
+        Optional<PartnerModel> optionalPartner = Optional.ofNullable(service.findById(id));
 
         if(optionalPartner.isPresent()) {
-            Partner oldObj = optionalPartner.get();
+            PartnerModel oldObj = optionalPartner.get();
 
             oldObj.setName(objDto.getName());
             oldObj.setPhone(objDto.getPhone());
@@ -124,15 +124,15 @@ public class PartnerController{
 
 
     @RequestMapping(value="/{id}", method=RequestMethod.PUT)
-    public ResponseEntity<Void> updatefull(@RequestBody Partner obj, @PathVariable String id) {
+    public ResponseEntity<Void> updatefull(@RequestBody PartnerModel obj, @PathVariable String id) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, Partner.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, PartnerModel.class);
         if(build != null) return build;
 
-        Optional<Partner> optionalUser = Optional.ofNullable(service.findById(id));
+        Optional<PartnerModel> optionalUser = Optional.ofNullable(service.findById(id));
 
         if(optionalUser.isPresent()) {
-            Partner oldObj = optionalUser.get();
+            PartnerModel oldObj = optionalUser.get();
 
             oldObj.setName(Objects.requireNonNullElse(obj.getName(), ""));
             oldObj.setAge(Objects.requireNonNullElse(obj.getAge(), 0));

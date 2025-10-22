@@ -1,6 +1,6 @@
 package com.fabianospdev.volunteer.dto;
 
-import com.fabianospdev.volunteer.models.Leader;
+import com.fabianospdev.volunteer.models.LeaderModel;
 
 import java.io.Serializable;
 
@@ -15,7 +15,7 @@ public class LeaderDTO implements Serializable{
 
     public LeaderDTO() { }
 
-    public LeaderDTO( Leader obj ) {
+    public LeaderDTO( LeaderModel obj ) {
         id = obj.getId();
         name = obj.getName();
         email = obj.getEmail();

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Document(collection="employee")
-public class Employee implements Serializable{
+@Document(collection="volunteer")
+public class VolunteerModel implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -26,17 +26,16 @@ public class Employee implements Serializable{
     private String address;
     private String job;
 
-    public Employee() {}
+    public VolunteerModel() {}
 
-    public Employee(String id, String name, String email, String phone) {
+    public VolunteerModel(String id, String name, String email, String phone) {
         this.id = id;
         this.name = name != null ? name : "";
         this.email = email != null ? email : "";
         this.phone = phone != null ? phone : "";
     }
 
-    public Employee(String id, String name, int age, String group, String role, List<String> functions, String status, String phone, String email, String address, String job) {
-        this.id = id;
+    public VolunteerModel(String id, String name, int age, String group, String role, List<String> functions, String status, String phone, String email, String address, String job) {
         this.name = name != null ? name : "";
         this.age = age > 0 ? age : 0;
         this.group = group != null ? group : "";
@@ -142,8 +141,8 @@ public class Employee implements Serializable{
     public boolean equals(Object o) {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
-        Employee employee = (Employee) o;
-        return Objects.equals(id, employee.id);
+        VolunteerModel volunteer = (VolunteerModel) o;
+        return Objects.equals(id, volunteer.id);
     }
 
     @Override

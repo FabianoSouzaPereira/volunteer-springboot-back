@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.usecases.secretary;
 
 import com.fabianospdev.volunteer.dto.SecretaryDTO;
-import com.fabianospdev.volunteer.models.Secretary;
+import com.fabianospdev.volunteer.models.SecretaryModel;
 import com.fabianospdev.volunteer.repositories.SecretaryRepository;
 import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
@@ -30,21 +30,21 @@ public class SecretaryUseCase{
     }
 
 
-    public List<Secretary> findAll() {
+    public List<SecretaryModel> findAll() {
         return secretaryRepository.findAll();
     }
 
-    public Secretary findById( String id ) {
-        Optional<Secretary> obj = secretaryRepository.findById( id );
+    public SecretaryModel findById(String id ) {
+        Optional<SecretaryModel> obj = secretaryRepository.findById( id );
         return obj.orElseThrow( () -> new ObjectNotFoundException( "Object not found" ) );
     }
 
-    public Secretary insert( Secretary secretary ) {
+    public SecretaryModel insert(SecretaryModel secretary ) {
         return secretaryRepository.insert( secretary );
     }
 
-    public Secretary update( Secretary secretary ) {
-        Optional<Secretary> obj = secretaryRepository.findById( secretary.getId() );
+    public SecretaryModel update(SecretaryModel secretary ) {
+        Optional<SecretaryModel> obj = secretaryRepository.findById( secretary.getId() );
 
         if ( obj.isEmpty() ) {
             String message = messageSource.getMessage( "object.not.exists", new Object[]{secretary.getId()}, LocaleContextHolder.getLocale() );
@@ -58,7 +58,7 @@ public class SecretaryUseCase{
         secretaryRepository.deleteById( id );
     }
 
-    private SecretaryDTO convertToSecretaryDTO( Secretary secretary ) {
+    private SecretaryDTO convertToSecretaryDTO( SecretaryModel secretary ) {
 
         if ( secretary == null ) {
             return new SecretaryDTO();

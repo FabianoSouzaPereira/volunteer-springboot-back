@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.services;
 
 import com.fabianospdev.volunteer.dto.UserDTO;
-import com.fabianospdev.volunteer.models.User;
+import com.fabianospdev.volunteer.models.UserModel;
 import com.fabianospdev.volunteer.repositories.UserRepository;
 import com.fabianospdev.volunteer.usecases.user.UserUseCase;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,10 +37,10 @@ class UserServiceTest{
     @Test
     void testFindAll() {
         List<UserDTO> userList = new ArrayList<>();
-        userList.add(new UserDTO(new User("1", "John", "john@example.com", "+123456789")));
-        userList.add(new UserDTO(new User("2", "Maria", "maria@example.com", "+987654321")));
+        userList.add(new UserDTO(new UserModel("1", "John", "john@example.com", "+123456789")));
+        userList.add(new UserDTO(new UserModel("2", "Maria", "maria@example.com", "+987654321")));
 
-        User exampleUser = new User("1", "John", 30, "Pastors", "Pastor", new ArrayList<>(Arrays.asList("Coding", "Testing", "Debugging")),
+        UserModel exampleUser = new UserModel("1", "John", 30, "Pastors", "PastorModel", new ArrayList<>(Arrays.asList("Coding", "Testing", "Debugging")),
                 "Active", "+55123456789", "joao.silva@example.com", "123 Main Street, City, Country", "Full-stack Developer");
 
         when(userUseCase.findAllDTO()).thenReturn(userList);
@@ -48,37 +48,37 @@ class UserServiceTest{
         assertEquals(2, result.size());
 
 
-        List<User> userListFull = new ArrayList<>();
+        List<UserModel> userListFull = new ArrayList<>();
         userListFull.add(
-                new User("1", "John", 30, "Pastors", "Pastor", new ArrayList<>(Arrays.asList("Coding", "Testing", "Debugging")),
+                new UserModel("1", "John", 30, "Pastors", "PastorModel", new ArrayList<>(Arrays.asList("Coding", "Testing", "Debugging")),
                         "Active", "+55123456789", "joao.silva@example.com", "123 Main Street, City, Country", "Full-stack Developer"));
         userListFull.add(
-                new User("2", "Maria", 25, "Teachers", "Teacher", new ArrayList<>(Arrays.asList("Teaching", "Planning", "Grading")),
+                new UserModel("2", "Maria", 25, "Teachers", "Teacher", new ArrayList<>(Arrays.asList("Teaching", "Planning", "Grading")),
                         "Active", "+55123456788", "maria.rodrigues@example.com", "456 Elm Street, City, Country", "Math Teacher"));
 
         when(userUseCase.findAll()).thenReturn(userListFull);
-        List<User> res = userService.findAll();
+        List<UserModel> res = userService.findAll();
         assertEquals(2, res.size());
     }
 
     @Test
     void testFindById() {
-        User user = new User("1", "John", "john@example.com", "+123456789");
+        UserModel user = new UserModel("1", "John", "john@example.com", "+123456789");
 
         when(userUseCase.findById("1")).thenReturn(user);
 
-        User result = userService.findById("1");
+        UserModel result = userService.findById("1");
 
         assertEquals("John", result.getName());
     }
 
     @Test
     void testInsert() {
-        User user = new User("1", "John", "john@example.com", "+123456789");
+        UserModel user = new UserModel("1", "John", "john@example.com", "+123456789");
 
         when(userUseCase.insert(user)).thenReturn(user);
 
-        User result = userService.insert(user);
+        UserModel result = userService.insert(user);
 
         assertEquals("John", result.getName());
     }
@@ -96,11 +96,11 @@ class UserServiceTest{
 
     @Test
     void testUpdate() {
-        User user = new User("1", "John", "john@example.com", "+123456789");
+        UserModel user = new UserModel("1", "John", "john@example.com", "+123456789");
 
         when(userUseCase.update(user)).thenReturn(user);
 
-        User result = userService.update(user);
+        UserModel result = userService.update(user);
 
         assertEquals("John", result.getName());
     }
@@ -114,8 +114,8 @@ class UserServiceTest{
         userDTO.setEmail("john@example.com");
         userDTO.setPhone("+123456789");
 
-        // Converter UserDTO para User
-        User result = userService.fromDTO(userDTO);
+        // Converter UserDTO para UserModel
+        UserModel result = userService.fromDTO(userDTO);
 
         assertEquals("John", result.getName());
         assertEquals("john@example.com", result.getEmail());

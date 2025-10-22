@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.usecases.volunteer;
 
 import com.fabianospdev.volunteer.dto.VolunteerDTO;
-import com.fabianospdev.volunteer.models.Volunteer;
+import com.fabianospdev.volunteer.models.VolunteerModel;
 import com.fabianospdev.volunteer.repositories.VolunteerRepository;
 import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
@@ -29,21 +29,21 @@ public class VolunteerUseCase{
         return volunteerRepository.findAllDTO();
     }
 
-    public List<Volunteer> findAll() {
+    public List<VolunteerModel> findAll() {
         return volunteerRepository.findAll();
     }
 
-    public Volunteer findById( String id ) {
-        Optional<Volunteer> obj = volunteerRepository.findById( id );
+    public VolunteerModel findById(String id ) {
+        Optional<VolunteerModel> obj = volunteerRepository.findById( id );
         return obj.orElseThrow( () -> new ObjectNotFoundException( "Object not found" ) );
     }
 
-    public Volunteer insert( Volunteer volunteer ) {
+    public VolunteerModel insert(VolunteerModel volunteer ) {
         return volunteerRepository.insert( volunteer );
     }
 
-    public Volunteer update( Volunteer volunteer ) {
-        Optional<Volunteer> obj = volunteerRepository.findById( volunteer.getId() );
+    public VolunteerModel update(VolunteerModel volunteer ) {
+        Optional<VolunteerModel> obj = volunteerRepository.findById( volunteer.getId() );
 
         if ( obj.isEmpty() ) {
             String message = messageSource.getMessage( "object.not.exists", new Object[]{volunteer.getId()}, LocaleContextHolder.getLocale() );
@@ -57,7 +57,7 @@ public class VolunteerUseCase{
         volunteerRepository.deleteById( id );
     }
 
-    private VolunteerDTO convertToVolunteerDTO( Volunteer volunteer ) {
+    private VolunteerDTO convertToVolunteerDTO( VolunteerModel volunteer ) {
 
         if ( volunteer == null ) {
             return new VolunteerDTO();

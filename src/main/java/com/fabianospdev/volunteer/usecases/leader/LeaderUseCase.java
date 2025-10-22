@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.usecases.leader;
 
 import com.fabianospdev.volunteer.dto.LeaderDTO;
-import com.fabianospdev.volunteer.models.Leader;
+import com.fabianospdev.volunteer.models.LeaderModel;
 import com.fabianospdev.volunteer.repositories.LeaderRepository;
 import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
@@ -30,21 +30,21 @@ public class LeaderUseCase{
     }
 
 
-    public List<Leader> findAll() {
+    public List<LeaderModel> findAll() {
         return leaderRepository.findAll();
     }
 
-    public Leader findById( String id ) {
-        Optional<Leader> obj = leaderRepository.findById( id );
+    public LeaderModel findById(String id ) {
+        Optional<LeaderModel> obj = leaderRepository.findById( id );
         return obj.orElseThrow( () -> new ObjectNotFoundException( "Object not found" ) );
     }
 
-    public Leader insert( Leader leader ) {
+    public LeaderModel insert(LeaderModel leader ) {
         return leaderRepository.insert( leader );
     }
 
-    public Leader update( Leader leader ) {
-        Optional<Leader> obj = leaderRepository.findById( leader.getId() );
+    public LeaderModel update(LeaderModel leader ) {
+        Optional<LeaderModel> obj = leaderRepository.findById( leader.getId() );
 
         if ( obj.isEmpty() ) {
             String message = messageSource.getMessage( "object.not.exists", new Object[]{leader.getId()}, LocaleContextHolder.getLocale() );
@@ -58,7 +58,7 @@ public class LeaderUseCase{
         leaderRepository.deleteById( id );
     }
 
-    private LeaderDTO convertToLeaderDTO( Leader leader ) {
+    private LeaderDTO convertToLeaderDTO( LeaderModel leader ) {
 
         if ( leader == null ) {
             return new LeaderDTO();

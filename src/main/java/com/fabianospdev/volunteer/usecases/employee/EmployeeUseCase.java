@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.usecases.employee;
 
 import com.fabianospdev.volunteer.dto.EmployeeDTO;
-import com.fabianospdev.volunteer.models.Employee;
+import com.fabianospdev.volunteer.models.EmployeeModel;
 import com.fabianospdev.volunteer.repositories.EmployeeRepository;
 import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
@@ -30,21 +30,21 @@ public class EmployeeUseCase{
     }
 
 
-    public List<Employee> findAll() {
+    public List<EmployeeModel> findAll() {
         return employeeRepository.findAll();
     }
 
-    public Employee findById( String id ) {
-        Optional<Employee> obj = employeeRepository.findById( id );
+    public EmployeeModel findById(String id ) {
+        Optional<EmployeeModel> obj = employeeRepository.findById( id );
         return obj.orElseThrow( () -> new ObjectNotFoundException( "Object not found" ) );
     }
 
-    public Employee insert( Employee employee ) {
+    public EmployeeModel insert(EmployeeModel employee ) {
         return employeeRepository.insert( employee );
     }
 
-    public Employee update( Employee employee ) {
-        Optional<Employee> obj = employeeRepository.findById( employee.getId() );
+    public EmployeeModel update(EmployeeModel employee ) {
+        Optional<EmployeeModel> obj = employeeRepository.findById( employee.getId() );
 
         if ( obj.isEmpty() ) {
             String message = messageSource.getMessage( "object.not.exists", new Object[]{employee.getId()}, LocaleContextHolder.getLocale() );
@@ -58,7 +58,7 @@ public class EmployeeUseCase{
         employeeRepository.deleteById( id );
     }
 
-    private EmployeeDTO convertToEmployeeDTO( Employee employee ) {
+    private EmployeeDTO convertToEmployeeDTO( EmployeeModel employee ) {
 
         if ( employee == null ) {
             return new EmployeeDTO();

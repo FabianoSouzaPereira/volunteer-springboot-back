@@ -1,6 +1,6 @@
 package com.fabianospdev.volunteer.dto;
 
-import com.fabianospdev.volunteer.models.Pastor;
+import com.fabianospdev.volunteer.models.PastorModel;
 
 import java.io.Serializable;
 
@@ -15,7 +15,7 @@ public class PastorDTO implements Serializable{
 
     public PastorDTO() { }
 
-    public PastorDTO( Pastor obj ) {
+    public PastorDTO( PastorModel obj ) {
         id = obj.getId();
         name = obj.getName();
         email = obj.getEmail();

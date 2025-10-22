@@ -1,6 +1,6 @@
 package com.fabianospdev.volunteer.dto;
 
-import com.fabianospdev.volunteer.models.Secretary;
+import com.fabianospdev.volunteer.models.SecretaryModel;
 
 import java.io.Serializable;
 
@@ -15,7 +15,7 @@ public class SecretaryDTO implements Serializable{
 
     public SecretaryDTO() { }
 
-    public SecretaryDTO( Secretary obj ) {
+    public SecretaryDTO( SecretaryModel obj ) {
         id = obj.getId();
         name = obj.getName();
         email = obj.getEmail();

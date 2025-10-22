@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.services;
 
 import com.fabianospdev.volunteer.dto.LeaderDTO;
-import com.fabianospdev.volunteer.models.Leader;
+import com.fabianospdev.volunteer.models.LeaderModel;
 import com.fabianospdev.volunteer.repositories.LeaderRepository;
 import com.fabianospdev.volunteer.usecases.leader.LeaderUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class LeaderService{
     private LeaderUseCase useCase;
 
 
-    public List<Leader> findAll() {
+    public List<LeaderModel> findAll() {
         return useCase.findAll();
     }
 
@@ -28,18 +28,18 @@ public class LeaderService{
         return useCase.findAllDTO();
     }
 
-    private LeaderDTO convertToLeaderDTO( Leader leader ) {
+    private LeaderDTO convertToLeaderDTO( LeaderModel leader ) {
         LeaderDTO leaderDTO = new LeaderDTO( leader );
         return leaderDTO;
     }
 
 
-    public Leader findById( String id ) {
-        Leader obj = useCase.findById( id );
+    public LeaderModel findById(String id ) {
+        LeaderModel obj = useCase.findById( id );
         return obj;
     }
 
-    public Leader insert( Leader obj ) {
+    public LeaderModel insert(LeaderModel obj ) {
         return useCase.insert( obj );
     }
 
@@ -47,16 +47,16 @@ public class LeaderService{
         useCase.deleteById( id );
     }
 
-    public Leader update( Leader obj ) {
+    public LeaderModel update(LeaderModel obj ) {
         return useCase.update( obj );
     }
 
-    private void updateData( Leader newObj, Leader obj ) {
+    private void updateData(LeaderModel newObj, LeaderModel obj ) {
         newObj.setName( obj.getName() );
         newObj.setEmail( obj.getEmail() );
     }
 
-    public Leader fromDTO( LeaderDTO objDto ) {
-        return new Leader( objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone() );
+    public LeaderModel fromDTO(LeaderDTO objDto ) {
+        return new LeaderModel( objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone() );
     }
 }

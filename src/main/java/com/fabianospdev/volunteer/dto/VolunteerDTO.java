@@ -1,6 +1,6 @@
 package com.fabianospdev.volunteer.dto;
 
-import com.fabianospdev.volunteer.models.Volunteer;
+import com.fabianospdev.volunteer.models.VolunteerModel;
 
 import java.io.Serializable;
 
@@ -15,7 +15,7 @@ public class VolunteerDTO implements Serializable{
 
     public VolunteerDTO() { }
 
-    public VolunteerDTO( Volunteer obj ) {
+    public VolunteerDTO( VolunteerModel obj ) {
         id = obj.getId();
         name = obj.getName();
         email = obj.getEmail();

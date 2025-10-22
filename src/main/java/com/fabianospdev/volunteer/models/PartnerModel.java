@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Document(collection="secretary")
-public class Secretary implements Serializable{
+@Document(collection="partner")
+public class PartnerModel implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -26,16 +26,16 @@ public class Secretary implements Serializable{
     private String address;
     private String job;
 
-    public Secretary() {}
+    public PartnerModel() {}
 
-    public Secretary(String id, String name, String email, String phone) {
+    public PartnerModel(String id, String name, String email, String phone) {
         this.id = id;
         this.name = name != null ? name : "";
         this.email = email != null ? email : "";
         this.phone = phone != null ? phone : "";
     }
 
-    public Secretary(String id, String name, int age, String group, String role, List<String> functions, String status, String phone, String email, String address, String job) {
+    public PartnerModel(String id, String name, int age, String group, String role, List<String> functions, String status, String phone, String email, String address, String job) {
         this.id = id;
         this.name = name != null ? name : "";
         this.age = age > 0 ? age : 0;
@@ -142,8 +142,8 @@ public class Secretary implements Serializable{
     public boolean equals(Object o) {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
-        Secretary secretary = (Secretary) o;
-        return Objects.equals(id, secretary.id);
+        PartnerModel partner = (PartnerModel) o;
+        return Objects.equals(id, partner.id);
     }
 
     @Override

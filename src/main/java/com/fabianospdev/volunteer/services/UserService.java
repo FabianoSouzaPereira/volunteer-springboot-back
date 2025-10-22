@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.services;
 
 import com.fabianospdev.volunteer.dto.UserDTO;
-import com.fabianospdev.volunteer.models.User;
+import com.fabianospdev.volunteer.models.UserModel;
 import com.fabianospdev.volunteer.repositories.UserRepository;
 import com.fabianospdev.volunteer.usecases.user.UserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class UserService{
     private UserUseCase useCase;
 
 
-    public List<User> findAll() {
+    public List<UserModel> findAll() {
         return useCase.findAll();
     }
 
@@ -28,18 +28,18 @@ public class UserService{
         return useCase.findAllDTO();
     }
 
-    private UserDTO convertToUserDTO( User user ) {
+    private UserDTO convertToUserDTO( UserModel user ) {
         UserDTO userDTO = new UserDTO( user );
         return userDTO;
     }
 
 
-    public User findById( String id ) {
-        User obj = useCase.findById( id );
+    public UserModel findById(String id ) {
+        UserModel obj = useCase.findById( id );
         return obj;
     }
 
-    public User insert( User obj ) {
+    public UserModel insert(UserModel obj ) {
         return useCase.insert( obj );
     }
 
@@ -47,16 +47,16 @@ public class UserService{
         useCase.deleteById( id );
     }
 
-    public User update( User obj ) {
+    public UserModel update(UserModel obj ) {
         return useCase.update( obj );
     }
 
-    private void updateData( User newObj, User obj ) {
+    private void updateData(UserModel newObj, UserModel obj ) {
         newObj.setName( obj.getName() );
         newObj.setEmail( obj.getEmail() );
     }
 
-    public User fromDTO( UserDTO objDto ) {
-        return new User( objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone() );
+    public UserModel fromDTO(UserDTO objDto ) {
+        return new UserModel( objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone() );
     }
 }

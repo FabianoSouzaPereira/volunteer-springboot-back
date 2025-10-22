@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.usecases.pastor;
 
 import com.fabianospdev.volunteer.dto.PastorDTO;
-import com.fabianospdev.volunteer.models.Pastor;
+import com.fabianospdev.volunteer.models.PastorModel;
 import com.fabianospdev.volunteer.repositories.PastorRepository;
 import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
@@ -29,21 +29,21 @@ public class PastorUseCase{
         return pastorRepository.findAllDTO();
     }
 
-    public List<Pastor> findAll() {
+    public List<PastorModel> findAll() {
         return pastorRepository.findAll();
     }
 
-    public Pastor findById( String id ) {
-        Optional<Pastor> obj = pastorRepository.findById( id );
+    public PastorModel findById(String id ) {
+        Optional<PastorModel> obj = pastorRepository.findById( id );
         return obj.orElseThrow( () -> new ObjectNotFoundException( "Object not found" ) );
     }
 
-    public Pastor insert( Pastor pastor ) {
+    public PastorModel insert(PastorModel pastor ) {
         return pastorRepository.insert( pastor );
     }
 
-    public Pastor update( Pastor pastor ) {
-        Optional<Pastor> obj = pastorRepository.findById( pastor.getId() );
+    public PastorModel update(PastorModel pastor ) {
+        Optional<PastorModel> obj = pastorRepository.findById( pastor.getId() );
 
         if ( obj.isEmpty() ) {
             String message = messageSource.getMessage( "object.not.exists", new Object[]{pastor.getId()}, LocaleContextHolder.getLocale() );
@@ -57,7 +57,7 @@ public class PastorUseCase{
         pastorRepository.deleteById( id );
     }
 
-    private PastorDTO convertToPastorDTO( Pastor pastor ) {
+    private PastorDTO convertToPastorDTO( PastorModel pastor ) {
 
         if ( pastor == null ) {
             return new PastorDTO();

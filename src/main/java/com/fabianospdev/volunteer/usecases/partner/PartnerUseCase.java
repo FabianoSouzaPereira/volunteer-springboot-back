@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.usecases.partner;
 
 import com.fabianospdev.volunteer.dto.PartnerDTO;
-import com.fabianospdev.volunteer.models.Partner;
+import com.fabianospdev.volunteer.models.PartnerModel;
 import com.fabianospdev.volunteer.repositories.PartnerRepository;
 import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
 import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
@@ -30,21 +30,21 @@ public class PartnerUseCase{
     }
 
 
-    public List<Partner> findAll() {
+    public List<PartnerModel> findAll() {
         return partnerRepository.findAll();
     }
 
-    public Partner findById( String id ) {
-        Optional<Partner> obj = partnerRepository.findById( id );
+    public PartnerModel findById(String id ) {
+        Optional<PartnerModel> obj = partnerRepository.findById( id );
         return obj.orElseThrow( () -> new ObjectNotFoundException( "Object not found" ) );
     }
 
-    public Partner insert( Partner partner ) {
+    public PartnerModel insert(PartnerModel partner ) {
         return partnerRepository.insert( partner );
     }
 
-    public Partner update( Partner partner ) {
-        Optional<Partner> obj = partnerRepository.findById( partner.getId() );
+    public PartnerModel update(PartnerModel partner ) {
+        Optional<PartnerModel> obj = partnerRepository.findById( partner.getId() );
 
         if ( obj.isEmpty() ) {
             String message = messageSource.getMessage( "object.not.exists", new Object[]{partner.getId()}, LocaleContextHolder.getLocale() );
@@ -58,7 +58,7 @@ public class PartnerUseCase{
         partnerRepository.deleteById( id );
     }
 
-    private PartnerDTO convertToPartnerDTO( Partner partner ) {
+    private PartnerDTO convertToPartnerDTO( PartnerModel partner ) {
 
         if ( partner == null ) {
             return new PartnerDTO();

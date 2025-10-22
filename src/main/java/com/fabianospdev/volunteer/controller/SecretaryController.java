@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.controller;
 
 import com.fabianospdev.volunteer.dto.SecretaryDTO;
-import com.fabianospdev.volunteer.models.Secretary;
+import com.fabianospdev.volunteer.models.SecretaryModel;
 import com.fabianospdev.volunteer.services.SecretaryService;
 import com.fabianospdev.volunteer.usecases.secretary.SecretaryUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +54,8 @@ public class SecretaryController{
     }
 
     @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<List<Secretary>> findAll() {
-        List<Secretary> list = service.findAll();
+    public ResponseEntity<List<SecretaryModel>> findAll() {
+        List<SecretaryModel> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
@@ -66,20 +66,20 @@ public class SecretaryController{
             return ResponseEntity.badRequest().build();
         }
 
-        Secretary obj = service.findById(id);
+        SecretaryModel obj = service.findById(id);
         return ResponseEntity.ok().body(new SecretaryDTO(obj));
     }
 
     @RequestMapping(value="/{id}/find-by-id", method=RequestMethod.GET)
-    public ResponseEntity<Secretary> findByIdList(@PathVariable String id) {
-        Secretary obj = service.findById(id);
+    public ResponseEntity<SecretaryModel> findByIdList(@PathVariable String id) {
+        SecretaryModel obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
     @RequestMapping(method=RequestMethod.POST)
-    public ResponseEntity<Void> insert(@RequestBody Secretary obj) {
+    public ResponseEntity<Void> insert(@RequestBody SecretaryModel obj) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, Secretary.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, null, SecretaryModel.class);
         if(build != null) return build;
 
         obj = service.insert(obj);
@@ -105,10 +105,10 @@ public class SecretaryController{
         ResponseEntity<Void> build = getVoidResponseEntity(objDto, id, SecretaryDTO.class);
         if(build != null) return build;
 
-        Optional<Secretary> optionalSecretary = Optional.ofNullable(service.findById(id));
+        Optional<SecretaryModel> optionalSecretary = Optional.ofNullable(service.findById(id));
 
         if(optionalSecretary.isPresent()) {
-            Secretary oldObj = optionalSecretary.get();
+            SecretaryModel oldObj = optionalSecretary.get();
 
             oldObj.setName(objDto.getName());
             oldObj.setPhone(objDto.getPhone());
@@ -124,15 +124,15 @@ public class SecretaryController{
 
 
     @RequestMapping(value="/{id}", method=RequestMethod.PUT)
-    public ResponseEntity<Void> updatefull(@RequestBody Secretary obj, @PathVariable String id) {
+    public ResponseEntity<Void> updatefull(@RequestBody SecretaryModel obj, @PathVariable String id) {
 
-        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, Secretary.class);
+        ResponseEntity<Void> build = getVoidResponseEntity(obj, id, SecretaryModel.class);
         if(build != null) return build;
 
-        Optional<Secretary> optionalUser = Optional.ofNullable(service.findById(id));
+        Optional<SecretaryModel> optionalUser = Optional.ofNullable(service.findById(id));
 
         if(optionalUser.isPresent()) {
-            Secretary oldObj = optionalUser.get();
+            SecretaryModel oldObj = optionalUser.get();
 
             oldObj.setName(Objects.requireNonNullElse(obj.getName(), ""));
             oldObj.setAge(Objects.requireNonNullElse(obj.getAge(), 0));

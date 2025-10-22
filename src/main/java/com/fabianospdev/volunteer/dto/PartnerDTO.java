@@ -1,6 +1,6 @@
 package com.fabianospdev.volunteer.dto;
 
-import com.fabianospdev.volunteer.models.Partner;
+import com.fabianospdev.volunteer.models.PartnerModel;
 
 import java.io.Serializable;
 
@@ -15,7 +15,7 @@ public class PartnerDTO implements Serializable{
 
     public PartnerDTO() { }
 
-    public PartnerDTO( Partner obj ) {
+    public PartnerDTO( PartnerModel obj ) {
         id = obj.getId();
         name = obj.getName();
         email = obj.getEmail();

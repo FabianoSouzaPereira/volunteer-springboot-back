@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Document(collection="volunteer")
-public class Volunteer implements Serializable{
+@Document(collection="pastor")
+public class PastorModel implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -26,16 +26,17 @@ public class Volunteer implements Serializable{
     private String address;
     private String job;
 
-    public Volunteer() {}
+    public PastorModel() {}
 
-    public Volunteer(String id, String name, String email, String phone) {
+    public PastorModel(String id, String name, String email, String phone) {
         this.id = id;
         this.name = name != null ? name : "";
         this.email = email != null ? email : "";
         this.phone = phone != null ? phone : "";
     }
 
-    public Volunteer(String id, String name, int age, String group, String role, List<String> functions, String status, String phone, String email, String address, String job) {
+    public PastorModel(String id, String name, int age, String group, String role, List<String> functions, String status, String phone, String email, String address, String job) {
+        this.id = id;
         this.name = name != null ? name : "";
         this.age = age > 0 ? age : 0;
         this.group = group != null ? group : "";
@@ -136,13 +137,12 @@ public class Volunteer implements Serializable{
         this.job = job;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
-        Volunteer volunteer = (Volunteer) o;
-        return Objects.equals(id, volunteer.id);
+        PastorModel pastor = (PastorModel) o;
+        return Objects.equals(id, pastor.id);
     }
 
     @Override

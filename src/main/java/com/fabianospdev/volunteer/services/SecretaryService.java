@@ -1,7 +1,7 @@
 package com.fabianospdev.volunteer.services;
 
 import com.fabianospdev.volunteer.dto.SecretaryDTO;
-import com.fabianospdev.volunteer.models.Secretary;
+import com.fabianospdev.volunteer.models.SecretaryModel;
 import com.fabianospdev.volunteer.repositories.SecretaryRepository;
 import com.fabianospdev.volunteer.usecases.secretary.SecretaryUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class SecretaryService{
     private SecretaryUseCase useCase;
 
 
-    public List<Secretary> findAll() {
+    public List<SecretaryModel> findAll() {
         return useCase.findAll();
     }
 
@@ -27,18 +27,18 @@ public class SecretaryService{
         return useCase.findAllDTO();
     }
 
-    private SecretaryDTO convertToSecretaryDTO( Secretary secretary ) {
+    private SecretaryDTO convertToSecretaryDTO( SecretaryModel secretary ) {
         SecretaryDTO secretaryDTO = new SecretaryDTO( secretary );
         return secretaryDTO;
     }
 
 
-    public Secretary findById( String id ) {
-        Secretary obj = useCase.findById( id );
+    public SecretaryModel findById(String id ) {
+        SecretaryModel obj = useCase.findById( id );
         return obj;
     }
 
-    public Secretary insert( Secretary obj ) {
+    public SecretaryModel insert(SecretaryModel obj ) {
         return useCase.insert( obj );
     }
 
@@ -46,16 +46,16 @@ public class SecretaryService{
         useCase.deleteById( id );
     }
 
-    public Secretary update( Secretary obj ) {
+    public SecretaryModel update(SecretaryModel obj ) {
         return useCase.update( obj );
     }
 
-    private void updateData( Secretary newObj, Secretary obj ) {
+    private void updateData(SecretaryModel newObj, SecretaryModel obj ) {
         newObj.setName( obj.getName() );
         newObj.setEmail( obj.getEmail() );
     }
 
-    public Secretary fromDTO( SecretaryDTO objDto ) {
-        return new Secretary( objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone() );
+    public SecretaryModel fromDTO(SecretaryDTO objDto ) {
+        return new SecretaryModel( objDto.getId(), objDto.getName(), objDto.getEmail(), objDto.getPhone() );
     }
 }
