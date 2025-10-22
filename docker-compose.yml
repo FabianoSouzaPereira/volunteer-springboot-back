@@ -1,13 +1,43 @@
-version: '3'
+version: '3.8'
+
 services:
+  zookeeper:
+    image: ubuntu/zookeeper:3.8-22.04_edge
+    container_name: zookeeper
+    networks:
+      - kafka-network
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: ubuntu/kafka:3.9.1-22.04_edge
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    networks:
+      - kafka-network
+    ports:
+      - "9092:9092"
+
   volunteer-app:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: volunteer-app
     image: volunteer-springboot-app
+    depends_on:
+      - kafka
+    networks:
+      - kafka-network
     ports:
-      - "80:8080"   # acesso web público via porta 80
-      - "9090:8080" # porta alternativa para mobile/testes
+      - "80:8080"
+      - "9090:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_KAFKA_CONSUMER_GROUP=user-registration-events-consumer
     restart: unless-stopped
+
+networks:
+  kafka-network:
+    driver: bridge

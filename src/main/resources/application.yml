@@ -8,11 +8,15 @@ spring:
       context-path: /volunteer
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
-      group-id: user-registration-events-consumer
-      properties:
-        zookeeper.connect: localhost:2181
+      group-id: ${SPRING_KAFKA_CONSUMER_GROUP:user-registration-events-consumer}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
   profile:
     active: prod
