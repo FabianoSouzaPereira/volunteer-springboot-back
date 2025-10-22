@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,6 +12,8 @@ import java.util.Objects;
 @Document(collection="user")
 public class User implements Serializable{
     private static final long serialVersionUID = 1L;
+    private String password;
+    private LocalDateTime createdAt;
 
     @Id
     private String id;
@@ -49,6 +52,14 @@ public class User implements Serializable{
         this.address = address != null ? address : "";
         this.job = job != null ? job : "";
     }
+
+    public String getPassword() { return password;  }
+
+    public void setPassword(String password) { this.password = password;  }
+
+    public LocalDateTime getCreatedAt() { return createdAt;  }
+
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     public String getId() {
         return id;
