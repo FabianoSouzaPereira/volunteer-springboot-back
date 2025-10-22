@@ -21,12 +21,6 @@ spring:
     open-in-view: false
 
   management:
-    # Desabilita métricas que quebram no container slim
-    metrics:
-      enable:
-        processors: false
-        jvm: false
-        system: false
     endpoints:
       web:
         exposure:
