@@ -5,7 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
+    ports: # 80 web and 9090 mobile
+      - "80:8080"
+      - "9090:8080"
     volumes:
       - ./target:/app

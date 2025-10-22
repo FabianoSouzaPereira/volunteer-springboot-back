@@ -1,15 +1,13 @@
-FROM openjdk:17-jdk-slim
-
-# Define o diretório de trabalho
+# Etapa 1: build da aplicação
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copia o arquivo JAR para o diretório de trabalho
-COPY target/volunteer-0.0.1-SNAPSHOT.jar /app/app.jar
-
-# Lista os arquivos no diretório de trabalho para verificação
-RUN ls -al /app
-
-# Define o comando de entrada para executar o aplicativo
+# Etapa 2: imagem final com apenas o JAR
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/volunteer-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
 # Expõe a porta 8080

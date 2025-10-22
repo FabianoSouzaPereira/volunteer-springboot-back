@@ -2,6 +2,7 @@ spring:
   application:
     name: Volunteer
   server:
+    address: 0.0.0.0
     port: 8080
     servlet:
       context-path: /volunteer
@@ -18,3 +19,12 @@ spring:
 
   jpa:
     open-in-view: false
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+    endpoint:
+      mappings:
+        enabled: true
