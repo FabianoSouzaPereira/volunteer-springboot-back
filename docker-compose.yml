@@ -10,4 +10,9 @@ services:
       - "9090:8080" # porta alternativa para mobile/testes
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+    command: >
+      java -Dmanagement.metrics.enable.processors=false
+           -Dmanagement.metrics.enable.jvm=false
+           -Dmanagement.metrics.enable.system=false
+           -jar app.jar
     restart: unless-stopped
