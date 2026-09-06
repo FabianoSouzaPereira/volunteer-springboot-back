@@ -243,15 +243,17 @@ com.fabianospdev.volunteer
 
 ### Local (profile `dev`)
 
-Pré-requisito: MongoDB em `mongodb://localhost:27017/volunteer`.
+Não precisa instalar Mongo. No `dev` a API sobe um Mongo embarcado (Flapdoodle) na primeira execução — pode demorar enquanto baixa o binário.
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-Ou rode `VolunteerApplication` no IntelliJ. O profile padrão é `dev`: Kafka e Firebase ficam desligados.
+Ou rode `VolunteerApplication` no IntelliJ. Kafka e Firebase ficam desligados.
 
 A API sobe em `http://localhost:8080/volunteer`.
+
+Para usar Atlas ou um `mongod` local, rode com `prod` (ou outro profile sem Mongo embarcado) e defina `MONGODB_URI`. Sem um Mongo acessível, o contexto falha com `Connection refused` em `localhost:27017`.
 
 ### Variáveis de ambiente
 

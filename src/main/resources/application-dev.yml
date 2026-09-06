@@ -2,6 +2,15 @@ spring:
   data:
     mongodb:
       uri: ${MONGODB_URI:mongodb://localhost:27017/volunteer}
+      database: volunteer
+
+# Starts an in-process Mongo when no external server is available.
+# To use Atlas or a local mongod instead, set MONGODB_URI and MONGODB_EMBEDDED=false.
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 7.0.14
 
 app:
   kafka:
