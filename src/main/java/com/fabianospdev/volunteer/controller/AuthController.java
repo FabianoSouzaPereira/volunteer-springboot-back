@@ -1,51 +1,33 @@
 package com.fabianospdev.volunteer.controller;
 
-import com.fabianospdev.volunteer.models.UserModel;
-import com.fabianospdev.volunteer.repositories.UserRepository;
-import com.fabianospdev.volunteer.security.JwtService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.Map;
+import com.fabianospdev.volunteer.dto.auth.AuthResponse;
+import com.fabianospdev.volunteer.dto.auth.LoginRequest;
+import com.fabianospdev.volunteer.dto.auth.RegisterRequest;
+import com.fabianospdev.volunteer.services.AuthService;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final AuthService authService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtService jwtService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/register")
-    public Map<String, String> register(@RequestBody UserModel user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setCreatedAt(LocalDateTime.now());
-        userRepository.save(user);
-        String token = jwtService.generateToken(user.getEmail());
-        return Map.of("token", token);
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody Map<String, String> creds) {
-        String email = creds.get("email");
-        String password = creds.get("password");
-        UserModel user = userRepository.findAll().stream()
-                .filter(u -> u.getEmail().equals(email))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("UserModel not found"));
-
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
-        }
-
-        String token = jwtService.generateToken(user.getEmail());
-        return Map.of("token", token);
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authService.login(request));
     }
 }

@@ -1,10 +1,10 @@
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://fabianodspereira:Y7UUiDh0bbjmGlxE@volunteers.znrcbmn.mongodb.net/volunteer
+      uri: ${MONGODB_URI}
 
-  jpa:
-    open-in-view: false
-    show-sql: true
-    properties:
-      hibernate.format_sql: false
+jwt:
+  secret: ${JWT_SECRET}
+
+firebase:
+  enabled: ${FIREBASE_ENABLED:false}

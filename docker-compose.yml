@@ -1,11 +1,24 @@
 version: '3.8'
 
 services:
+  mongo:
+    image: mongo:7
+    container_name: volunteer-mongo
+    networks:
+      - volunteer-network
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: volunteer
+    restart: unless-stopped
+
   zookeeper:
     image: ubuntu/zookeeper:3.8-22.04_edge
     container_name: zookeeper
     networks:
-      - kafka-network
+      - volunteer-network
     ports:
       - "2181:2181"
 
@@ -15,7 +28,7 @@ services:
     depends_on:
       - zookeeper
     networks:
-      - kafka-network
+      - volunteer-network
     ports:
       - "9092:9092"
 
@@ -26,18 +39,26 @@ services:
     container_name: volunteer-app
     image: volunteer-springboot-app
     depends_on:
+      - mongo
       - kafka
     networks:
-      - kafka-network
+      - volunteer-network
     ports:
       - "80:8080"
       - "9090:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+      - MONGODB_URI=mongodb://mongo:27017/volunteer
+      - JWT_SECRET=${JWT_SECRET:-change-me-in-production-min-32-chars!!}
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_KAFKA_CONSUMER_GROUP=user-registration-events-consumer
+      - KAFKA_ENABLED=true
+      - FIREBASE_ENABLED=false
     restart: unless-stopped
 
 networks:
-  kafka-network:
+  volunteer-network:
     driver: bridge
+
+volumes:
+  mongo-data:

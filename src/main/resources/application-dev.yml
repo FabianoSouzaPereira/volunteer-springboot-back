@@ -1,0 +1,11 @@
+spring:
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/volunteer}
+
+app:
+  kafka:
+    enabled: ${KAFKA_ENABLED:false}
+
+firebase:
+  enabled: ${FIREBASE_ENABLED:false}

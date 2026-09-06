@@ -1,124 +1,114 @@
 package com.fabianospdev.volunteer.services;
 
-import com.fabianospdev.volunteer.dto.UserDTO;
-import com.fabianospdev.volunteer.models.UserModel;
+import com.fabianospdev.volunteer.dto.user.PasswordChangeRequest;
+import com.fabianospdev.volunteer.dto.user.UserCreateRequest;
+import com.fabianospdev.volunteer.dto.user.UserResponse;
+import com.fabianospdev.volunteer.mapper.UserMapper;
+import com.fabianospdev.volunteer.messaging.DomainEventPublisher;
+import com.fabianospdev.volunteer.messaging.KafkaTopics;
+import com.fabianospdev.volunteer.model.User;
 import com.fabianospdev.volunteer.repositories.UserRepository;
-import com.fabianospdev.volunteer.usecases.user.UserUseCase;
+import com.fabianospdev.volunteer.services.exception.ForbiddenException;
+import com.fabianospdev.volunteer.services.exception.ObjectAlreadyExistsException;
+import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.MessageSource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-class UserServiceTest{
+@ExtendWith(MockitoExtension.class)
+class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
 
     @Mock
-    private UserUseCase userUseCase;
+    private PasswordEncoder passwordEncoder;
 
-    @InjectMocks
+    @Mock
+    private DomainEventPublisher eventPublisher;
+
+    @Mock
+    private MessageSource messageSource;
+
     private UserService userService;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        userService = new UserService(userRepository, new UserMapper(), passwordEncoder, eventPublisher, messageSource);
+        org.mockito.Mockito.lenient().when(messageSource.getMessage(anyString(), any(), any(Locale.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
     }
 
     @Test
-    void testFindAll() {
-        List<UserDTO> userList = new ArrayList<>();
-        userList.add(new UserDTO(new UserModel("1", "John", "john@example.com", "+123456789")));
-        userList.add(new UserDTO(new UserModel("2", "Maria", "maria@example.com", "+987654321")));
-
-        UserModel exampleUser = new UserModel("1", "John", 30, "Pastors", "PastorModel", new ArrayList<>(Arrays.asList("Coding", "Testing", "Debugging")),
-                "Active", "+55123456789", "joao.silva@example.com", "123 Main Street, City, Country", "Full-stack Developer");
-
-        when(userUseCase.findAllDTO()).thenReturn(userList);
-        List<UserDTO> result = userService.findAllDTO();
-        assertEquals(2, result.size());
-
-
-        List<UserModel> userListFull = new ArrayList<>();
-        userListFull.add(
-                new UserModel("1", "John", 30, "Pastors", "PastorModel", new ArrayList<>(Arrays.asList("Coding", "Testing", "Debugging")),
-                        "Active", "+55123456789", "joao.silva@example.com", "123 Main Street, City, Country", "Full-stack Developer"));
-        userListFull.add(
-                new UserModel("2", "Maria", 25, "Teachers", "Teacher", new ArrayList<>(Arrays.asList("Teaching", "Planning", "Grading")),
-                        "Active", "+55123456788", "maria.rodrigues@example.com", "456 Elm Street, City, Country", "Math Teacher"));
-
-        when(userUseCase.findAll()).thenReturn(userListFull);
-        List<UserModel> res = userService.findAll();
-        assertEquals(2, res.size());
-    }
-
-    @Test
-    void testFindById() {
-        UserModel user = new UserModel("1", "John", "john@example.com", "+123456789");
-
-        when(userUseCase.findById("1")).thenReturn(user);
-
-        UserModel result = userService.findById("1");
-
-        assertEquals("John", result.getName());
-    }
-
-    @Test
-    void testInsert() {
-        UserModel user = new UserModel("1", "John", "john@example.com", "+123456789");
-
-        when(userUseCase.insert(user)).thenReturn(user);
-
-        UserModel result = userService.insert(user);
-
-        assertEquals("John", result.getName());
-    }
-
-    @Test
-    void testDelete() {
-        String userId = "1";
-
-        assertDoesNotThrow(() -> {
-            userService.delete(userId);
+    void createEncodesPasswordAndPublishesEvent() {
+        UserCreateRequest request = new UserCreateRequest("Ana", "ana@example.com", "secret1", "11999999999");
+        when(userRepository.existsByEmailIgnoreCase("ana@example.com")).thenReturn(false);
+        when(passwordEncoder.encode("secret1")).thenReturn("encoded");
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            user.setId("u1");
+            return user;
         });
 
-        verify(userUseCase, times(1)).deleteById(userId);
+        UserResponse response = userService.create(request);
+
+        assertEquals("u1", response.id());
+        assertEquals("ana@example.com", response.email());
+        verify(eventPublisher).publish(eq(KafkaTopics.USER_REGISTRATION), contains("Ana"));
+        verify(passwordEncoder).encode("secret1");
     }
 
     @Test
-    void testUpdate() {
-        UserModel user = new UserModel("1", "John", "john@example.com", "+123456789");
+    void createRejectsDuplicateEmail() {
+        UserCreateRequest request = new UserCreateRequest("Ana", "ana@example.com", "secret1", null);
+        when(userRepository.existsByEmailIgnoreCase("ana@example.com")).thenReturn(true);
 
-        when(userUseCase.update(user)).thenReturn(user);
-
-        UserModel result = userService.update(user);
-
-        assertEquals("John", result.getName());
+        assertThrows(ObjectAlreadyExistsException.class, () -> userService.create(request));
+        verify(userRepository, never()).save(any());
     }
 
     @Test
-    void testFromDTO() {
-        // Criar um UserDTO para teste
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId("1");
-        userDTO.setName("John");
-        userDTO.setEmail("john@example.com");
-        userDTO.setPhone("+123456789");
+    void findByEmailIsCaseInsensitive() {
+        User user = User.builder().id("u1").name("Ana").email("ana@example.com").build();
+        when(userRepository.findByEmailIgnoreCase("ana@example.com")).thenReturn(Optional.of(user));
 
-        // Converter UserDTO para UserModel
-        UserModel result = userService.fromDTO(userDTO);
+        assertEquals("u1", userService.findByEmail("  ANA@example.com ").getId());
+    }
 
-        assertEquals("John", result.getName());
-        assertEquals("john@example.com", result.getEmail());
-        assertEquals("+123456789", result.getPhone());
+    @Test
+    void changePasswordValidatesCurrentPassword() {
+        User user = User.builder().id("u1").password("encoded-old").build();
+        when(userRepository.findById("u1")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("wrong", "encoded-old")).thenReturn(false);
+
+        assertThrows(ForbiddenException.class, () ->
+                userService.changePassword("u1", new PasswordChangeRequest("wrong", "newpass"))
+        );
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void deleteRequiresExistingUser() {
+        when(userRepository.findById("missing")).thenReturn(Optional.empty());
+
+        assertThrows(ObjectNotFoundException.class, () -> userService.delete("missing"));
+        verify(userRepository, never()).deleteById(anyString());
     }
 }

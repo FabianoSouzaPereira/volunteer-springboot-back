@@ -1,72 +1,82 @@
 package com.fabianospdev.volunteer.controller.exception;
 
-import com.fabianospdev.volunteer.services.exception.*;
+import com.fabianospdev.volunteer.services.exception.DatabaseInsertException;
+import com.fabianospdev.volunteer.services.exception.ForbiddenException;
+import com.fabianospdev.volunteer.services.exception.InternalServerErrorException;
+import com.fabianospdev.volunteer.services.exception.InvalidRequestException;
+import com.fabianospdev.volunteer.services.exception.ObjectAlreadyExistsException;
+import com.fabianospdev.volunteer.services.exception.ObjectNotExistsException;
+import com.fabianospdev.volunteer.services.exception.ObjectNotFoundException;
+import com.fabianospdev.volunteer.services.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
-public class ResourceExceptionHandler{
+import java.util.stream.Collectors;
+
+@RestControllerAdvice
+public class ResourceExceptionHandler {
 
     @ExceptionHandler(ObjectNotFoundException.class)
-    public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e, HttpServletRequest request) {
-
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Not found", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(status).body(err);
-    }
-
-    @ExceptionHandler(DatabaseInsertException.class)
-    public ResponseEntity<StandardError> databaseInsertError(DatabaseInsertException e, HttpServletRequest request) {
-
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Database Insert Error", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(status).body(err);
-    }
-
-
-    @ExceptionHandler(InvalidRequestException.class)
-    public ResponseEntity<StandardError> invalidRequest(InvalidRequestException e, HttpServletRequest request) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Bad Request", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(status).body(err);
-    }
-
-    @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<StandardError> unauthorized(UnauthorizedException e, HttpServletRequest request) {
-        HttpStatus status = HttpStatus.UNAUTHORIZED;
-        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Unauthorized", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(status).body(err);
-    }
-
-    @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<StandardError> forbidden(ForbiddenException e, HttpServletRequest request) {
-        HttpStatus status = HttpStatus.FORBIDDEN;
-        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Forbidden", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(status).body(err);
-    }
-
-    @ExceptionHandler(InternalServerErrorException.class)
-    public ResponseEntity<StandardError> internalServerError(InternalServerErrorException e, HttpServletRequest request) {
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Internal Server Error", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(status).body(err);
-    }
-
-    @ExceptionHandler(ObjectAlreadyExistsException.class)
-    public ResponseEntity<StandardError> ObjectAlreadyExists(ObjectAlreadyExistsException e, HttpServletRequest request) {
-        HttpStatus status = HttpStatus.CONFLICT; // 409 Conflict
-        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Object Already Exists", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(status).body(err);
+    public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException ex, HttpServletRequest request) {
+        return error(HttpStatus.NOT_FOUND, "Not found", ex.getMessage(), request);
     }
 
     @ExceptionHandler(ObjectNotExistsException.class)
-    public ResponseEntity<StandardError> ObjectNotExists(ObjectNotExistsException e, HttpServletRequest request) {
-        HttpStatus status = HttpStatus.CONFLICT; // 409 Conflict
-        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Object Not Exists", e.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(status).body(err);
+    public ResponseEntity<StandardError> objectNotExists(ObjectNotExistsException ex, HttpServletRequest request) {
+        return error(HttpStatus.NOT_FOUND, "Not found", ex.getMessage(), request);
     }
 
+    @ExceptionHandler(ObjectAlreadyExistsException.class)
+    public ResponseEntity<StandardError> objectAlreadyExists(ObjectAlreadyExistsException ex, HttpServletRequest request) {
+        return error(HttpStatus.CONFLICT, "Conflict", ex.getMessage(), request);
+    }
+
+    @ExceptionHandler({InvalidRequestException.class, HttpMessageNotReadableException.class})
+    public ResponseEntity<StandardError> badRequest(Exception ex, HttpServletRequest request) {
+        return error(HttpStatus.BAD_REQUEST, "Bad Request", ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<StandardError> validation(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        String message = ex.getBindingResult().getFieldErrors().stream()
+                .map(this::formatFieldError)
+                .collect(Collectors.joining("; "));
+        return error(HttpStatus.BAD_REQUEST, "Validation failed", message, request);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<StandardError> unauthorized(UnauthorizedException ex, HttpServletRequest request) {
+        return error(HttpStatus.UNAUTHORIZED, "Unauthorized", ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<StandardError> forbidden(ForbiddenException ex, HttpServletRequest request) {
+        return error(HttpStatus.FORBIDDEN, "Forbidden", ex.getMessage(), request);
+    }
+
+    @ExceptionHandler({DatabaseInsertException.class, InternalServerErrorException.class})
+    public ResponseEntity<StandardError> serverError(RuntimeException ex, HttpServletRequest request) {
+        return error(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", ex.getMessage(), request);
+    }
+
+    private ResponseEntity<StandardError> error(HttpStatus status, String error, String message, HttpServletRequest request) {
+        StandardError body = StandardError.builder()
+                .timestamp(System.currentTimeMillis())
+                .status(status.value())
+                .error(error)
+                .message(message)
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(status).body(body);
+    }
+
+    private String formatFieldError(FieldError fieldError) {
+        return fieldError.getField() + ": " + fieldError.getDefaultMessage();
+    }
 }
